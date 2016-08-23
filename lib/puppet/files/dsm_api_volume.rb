@@ -96,7 +96,7 @@ class DSMAPIVolume
 	end
 	
 	def self.assign_volume_folder(folder_name, sc)
-		if folder_name == "puppet"
+		if folder_name == $puppet_folder
 			fold_id = DSMAPIFolder.get_puppet_folder_id(sc, "volume")
 		else
 			fold_id = DSMAPIFolder.get_folder_id(folder_name, sc, "volume")

@@ -20,7 +20,7 @@ class DSMAPIFind
 		filter = DSMAPIRequest.define_filter([
 			["name", name, "Equals"],
 			["scSerialNumber", sc.to_i, "Equals"],
-			["serverFolderPath", "puppet", "StartsWith"]
+			["serverFolderPath", $puppet_folder, "StartsWith"]
 		])
 		
 		# Handle response
@@ -46,7 +46,7 @@ class DSMAPIFind
 		filter = DSMAPIRequest.define_filter([
 			["name", name, "Equals"],
 			["scSerialNumber", sc.to_i, "Equals"],
-			["volumeFolderPath", "puppet", "StartsWith"]
+			["volumeFolderPath", $puppet_folder, "StartsWith"]
 		])
 		
 		# Handle response

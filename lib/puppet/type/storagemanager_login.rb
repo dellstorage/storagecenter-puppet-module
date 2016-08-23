@@ -4,6 +4,14 @@ Puppet::Type.newtype(:dellstorageprovisioning_login) do
 	@doc = "Manage logging into Dell Storage Manager."
 	
 	ensurable
+	newparam(:puppetfoldername) do
+		desc "The name of the top-level folder in which Puppet may work."
+		validate do |value|
+			unless value =~ /^[\p{Word}\s\-]+$/u
+				raise ArgumentError, "'%s' is not a valid top-level folder name." %value
+			end
+		end
+	end
 	
 	newparam(:name) do
 		desc "The ip address of the DSM."

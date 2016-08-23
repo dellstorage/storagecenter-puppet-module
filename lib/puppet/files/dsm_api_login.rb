@@ -37,8 +37,10 @@ class DSMAPILogin
 	end
 		
 	
-	def self.login(ip, user, pass)
+	def self.login(ip, user, pass, folder_name)
 		Puppet.debug("Inside login method of DSMAPILogin.")
+		$base_url = "https://" + ip + ":3033/api/rest"
+		url = "#{$base_url}/ApiConnection/Login"
 		url = DSMAPILogin.make_url(ip)
 		resp = DSMAPILogin.make_connection(url, user, pass)
 		cookie =
@@ -48,11 +50,11 @@ class DSMAPILogin
 				raise Puppet::Error, "Login as user '#{user}' failed: #{resp.code} #{resp.message}"
 				nil
 			end
-		url = "https://" + ip + ":3033/api/rest"
 		
 		# This is the only method that writes these variables
 		$cookie = cookie
-		$base_url = url
+		
+		$puppet_folder = folder_name
 		
 		Puppet.info "Login Successful."
 	end

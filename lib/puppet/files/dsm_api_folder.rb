@@ -16,7 +16,7 @@ class DSMAPIFolder
 		filter_request = [
 			["name", name, "Equals"],
 			["scSerialNumber", sc.to_i, "Equals"],
-			["folderPath", "puppet", "StartsWith"]]
+			["folderPath", $puppet_folder, "StartsWith"]]
 		filter = DSMAPIRequest.define_filter(filter_request)
 		
 		# Handle response
@@ -37,7 +37,7 @@ class DSMAPIFolder
 		url = "#{$base_url}/StorageCenter/Sc#{type.capitalize}Folder/GetList"
 
 		# Create filter
-		filter_request = [["name", "puppet", "Equals"], ["scSerialNumber", sc.to_i, "Equals"]]
+		filter_request = [["name", $puppet_folder, "Equals"], ["scSerialNumber", sc.to_i, "Equals"]]
 		filter = DSMAPIRequest.define_filter(filter_request)
 
 		# Handle Response
@@ -47,12 +47,12 @@ class DSMAPIFolder
 
 		# If the puppet folder does not exist, must create one.
 		unless id
-			Puppet.info "'puppet' folder not found.\n Creating 'puppet' folder on Storage Center #{sc}."
+			Puppet.info "'#{$puppet_folder}' folder not found.\n Creating '#{$puppet_folder}' folder on Storage Center #{sc}."
 			
 			# Creating puppet folder
 			url = "#{$base_url}/StorageCenter/Sc#{type.capitalize}Folder"
 			payload = {
-				"Name" => "puppet",
+				"Name" => $puppet_folder,
 				"StorageCenter" => sc.to_i,
 			}
 			# Handle response
