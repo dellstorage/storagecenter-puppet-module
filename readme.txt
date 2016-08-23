@@ -4,23 +4,23 @@
 
 This module uses Puppet's Custom Resource Types to allow the user to provision a setup on the Storage Center, ensure that it is maintained, and tear it down.
 
-The module is run by either a main manifest, a puppet master, or an ENC, that calls the main storagemanager class (`manifests/init.pp`) with parameters defining the desired setup of the Storage Center(s).
+The module is run by either a main manifest, a puppet master, or an ENC, that calls the main dellstorageprovisioning class (`manifests/init.pp`) with parameters defining the desired setup of the Storage Center(s).
 
 This module will create a 'puppet' folder on the Storage Center and will only create or destroy Storage Center objects within that folder. This is to protect the users' data as this module uses the object's name as an unique identifier, while the Storage Center allows multiple objects with the same name. 
 
 ## Setup
 
-The storagemanager module requires a Puppet version of 3.8.4 or later. Earlier versions of Puppet use an outdated version of OpenSSL which the DSM API will not allow to connect to the Storage Center.
+The dellstorageprovisioning module requires a Puppet version of 3.8.4 or later. Earlier versions of Puppet use an outdated version of OpenSSL which the DSM API will not allow to connect to the Storage Center.
 
-This module requires the Puppet [stdlib module] (https://forge.puppet.com/puppetlabs/stdlib/3.2.1). If using an ENC, the stdlib class must be assigned to the same node as the storagemanager module.
+This module requires the Puppet [stdlib module] (https://forge.puppet.com/puppetlabs/stdlib/3.2.1). If using an ENC, the stdlib class must be assigned to the same node as the dellstorageprovisioning module.
 
-The storagemanager module has been designed to work with Foreman, Puppet Apply, and Puppet agent.
+The dellstorageprovisioning module has been designed to work with Foreman, Puppet Apply, and Puppet agent.
 
 ## Usage
 
 ### Puppet Apply
 
-[Puppet Apply] (https://docs.puppet.com/puppet/latest/reference/man/apply.html) is the client-only application of a local manifest. The user should ensure that the storagemanager module is located within an environment on Puppet's [environmentpath] (https://docs.puppet.com/4.6/reference/environments_configuring.html). The environmentpath can be set in puppet.conf, which is found in the [$confdir] (https://docs.puppet.com/puppet/4.6/reference/dirs_confdir.html).
+[Puppet Apply] (https://docs.puppet.com/puppet/latest/reference/man/apply.html) is the client-only application of a local manifest. The user should ensure that the dellstorageprovisioning module is located within an environment on Puppet's [environmentpath] (https://docs.puppet.com/4.6/reference/environments_configuring.html). The environmentpath can be set in puppet.conf, which is found in the [$confdir] (https://docs.puppet.com/puppet/4.6/reference/dirs_confdir.html).
 
 ### Puppet Agent
 
@@ -28,9 +28,9 @@ The storagemanager module has been designed to work with Foreman, Puppet Apply, 
 
 ### Foreman
 
-To use [Foreman] (https://theforeman.org), the `storagemanager` and `stdlib` classes must be assigned to the host from which the program will send the REST calls. Defaults can either be set within the code of the subclasses (select `Use Puppet Default` in Foreman to use these values as the default), or through Foreman. Any parameter for which the default value is a blank string should be set to use the Puppet Default when not overridden, as Foreman will not send a blank string as a parameter and Puppet will not declare a resource if a parameter is missing. The definition arrays are intended to be overridden within the main `storagemanager` class, and the default values in the subclasses will fill in missing information.
+To use [Foreman] (https://theforeman.org), the `dellstorageprovisioning` and `stdlib` classes must be assigned to the host from which the program will send the REST calls. Defaults can either be set within the code of the subclasses (select `Use Puppet Default` in Foreman to use these values as the default), or through Foreman. Any parameter for which the default value is a blank string should be set to use the Puppet Default when not overridden, as Foreman will not send a blank string as a parameter and Puppet will not declare a resource if a parameter is missing. The definition arrays are intended to be overridden within the main `dellstorageprovisioning` class, and the default values in the subclasses will fill in missing information.
 
-Note: It is only necessary to assign the main storagemanager class to the host in Foreman, as all the subclasses are called by the main class.
+Note: It is only necessary to assign the main dellstorageprovisioning class to the host in Foreman, as all the subclasses are called by the main class.
 
 Helpful Links: [Puppet Architecture] (https://docs.puppet.com/3.8/reference/architecture.html)
 
@@ -38,15 +38,15 @@ Helpful Links: [Puppet Architecture] (https://docs.puppet.com/3.8/reference/arch
 
 ### Login
 
-A user can log into the DSM by providing the `ip_address` of the DSM and their username and password to the storagemanager class. In Foreman the user can use the `Hidden Value` option to hide sensitive information from other Foreman users in your organization. If the user is using Puppet Apply, they will need to store the username and password in the main manifest.
+A user can log into the DSM by providing the `ip_address` of the DSM and their username and password to the dellstorageprovisioning class. In Foreman the user can use the `Hidden Value` option to hide sensitive information from other Foreman users in your organization. If the user is using Puppet Apply, they will need to store the username and password in the main manifest.
 
 ### Server Folders
 
-Server Folders can be created or destroyed by providing a Server Folder definition to the storagemanager class. Default values for Server Folder properties can be set in the `storagemanager::server_folder` subclass. Multiple Server Folders can be created in the same definition with the same properties by either providing multiple folder names in an array, or by specifying a number of folders to be created in a series. Multiple Server Folder definitions can be provided within the `server_folder_definition_array` that is passed to the `storagemanager` class. All Server Folders must have unique names. Server Folders and Volume Folders MAY have the same names.
-The `storagemanager` class will create Server Folders before creating Servers, (and delete them after), so there are no dependency issues. However, parent folders must be defined before their children.
+Server Folders can be created or destroyed by providing a Server Folder definition to the dellstorageprovisioning class. Default values for Server Folder properties can be set in the `dellstorageprovisioning::server_folder` subclass. Multiple Server Folders can be created in the same definition with the same properties by either providing multiple folder names in an array, or by specifying a number of folders to be created in a series. Multiple Server Folder definitions can be provided within the `server_folder_definition_array` that is passed to the `dellstorageprovisioning` class. All Server Folders must have unique names. Server Folders and Volume Folders MAY have the same names.
+The `dellstorageprovisioning` class will create Server Folders before creating Servers, (and delete them after), so there are no dependency issues. However, parent folders must be defined before their children.
 Servers can be added to folders by listing the `folder_name` in the Server definiton.
 
-Example parameter for `storagemanager` class:
+Example parameter for `dellstorageprovisioning` class:
 ```
 server_folder_definition_array => [{
 	folder_name => ['Parent Folder', 'Other Folder']
@@ -69,9 +69,9 @@ This example will create the following directory structure:
 
 ### Server Clusters
 
-Server Clusters can be created or destroyed by providing a Server Cluster definition to the `storagemanager` class. Default values for cluster properties can be set in the `storagemanager::server_cluster` subclass. Multiple clusters can be created in the same definition with the same properties by either providing multiple cluster names in the array, or by specifying a number of clusters to be created in a series. Multiple cluster definitions can be provided within the `server_cluster_definition_array` that is passed to the `storagemanager` class. All Server Clusters must have unique names. Servers and Server Clusters cannot have the same names. Server Clusters defined in the `server_cluster_definition_array` will always be created before Servers defined in the `server_definition_array`, and deleted after, so there are no dependency issues.
+Server Clusters can be created or destroyed by providing a Server Cluster definition to the `dellstorageprovisioning` class. Default values for cluster properties can be set in the `dellstorageprovisioning::server_cluster` subclass. Multiple clusters can be created in the same definition with the same properties by either providing multiple cluster names in the array, or by specifying a number of clusters to be created in a series. Multiple cluster definitions can be provided within the `server_cluster_definition_array` that is passed to the `dellstorageprovisioning` class. All Server Clusters must have unique names. Servers and Server Clusters cannot have the same names. Server Clusters defined in the `server_cluster_definition_array` will always be created before Servers defined in the `server_definition_array`, and deleted after, so there are no dependency issues.
 
-Example paramater for `storagemanager` class:
+Example paramater for `dellstorageprovisioning` class:
 ```
 server_cluster_definition_array => [{
 	num_clusters => 1,
@@ -83,11 +83,11 @@ This `server_cluster_definition_array` will create one Server Cluster named 'Clu
 
 ### Servers
 
-Servers can be created or destroyed by providing a Server definition to the `storagemanager` class. Default values for Server properties can be set in the `storagemanager::server` subclass. Multiple Server definitions can be provided within the `server_definition_array` that is passed to the `storagemanager` class. All Servers must have unique names. Servers and Server Clusters cannot have the same names.
+Servers can be created or destroyed by providing a Server definition to the `dellstorageprovisioning` class. Default values for Server properties can be set in the `dellstorageprovisioning::server` subclass. Multiple Server definitions can be provided within the `server_definition_array` that is passed to the `dellstorageprovisioning` class. All Servers must have unique names. Servers and Server Clusters cannot have the same names.
 Server Clusters can be created within the `server_definition_array` by setting the `is_server_cluster` parameter to *true*. If there are dependencies between Servers and Server Clusters, the Server Cluster must be defined in the `server_definition_array` before the Server.
 HBAs can be added to Servers by either providing values to the `wwn_or_iscsi_name` and `port_type` parameters, or by using the `hba_definition_array`. If creating multiple Servers in one definition, the WWN or iSCSI names must be in an array with one WWN or iSCSI name per Server being created, listed in the same order as the Servers they are to be assigned to.
 
-Example Paramager for `storagemanager` class:
+Example Paramager for `dellstorageprovisioning` class:
 ```
 server_definition_array => [{
 	num_servers => 1,
@@ -108,10 +108,10 @@ This `server_definition_array` will create one Server Cluster named 'Cluster' an
 
 ### HBAs
 
-HBAs can be added to or removed from Servers by providing an HBA definition to the `storagemanager` class. Each definition should include the name of one Server and one WWN or iSCSI name, and the port type. Default values for HBA properties can be set in the `storagemanager::hba` subclass. The `storagemanager` class will create Servers before attempting to add HBAs, so there are no dependency issues.
+HBAs can be added to or removed from Servers by providing an HBA definition to the `dellstorageprovisioning` class. Each definition should include the name of one Server and one WWN or iSCSI name, and the port type. Default values for HBA properties can be set in the `dellstorageprovisioning::hba` subclass. The `dellstorageprovisioning` class will create Servers before attempting to add HBAs, so there are no dependency issues.
 HBAs can also be added to Servers by listing the WWN or iSCSI name and port type in the `server_definition_array`.
 
-Example Parameter for `storagemanager` class:
+Example Parameter for `dellstorageprovisioning` class:
 ```
 hba_definition_array => [{
 	port_type => 'Iscsi',
@@ -127,11 +127,11 @@ This example will add HBAs to both Server01 and Server02.
 
 ### Volume Folders
 
-Volume Folders can be created or destroyed by providing a Volume Folder definition to the `storagemanager` class. Default values for Volume Folder properties can be set in the `storagemanager::volume_folder` subclass. Multiple Volume Folders can be created in the same definition with the same properties by either providing multiple folder names in an array, or by specifying a number of folders to be created in a series. Multiple Volume Folder definitions can be provided within the `volume_folder_definition_array` that is passed to the storagemanager class. All Volume Folders must have unique names. Server Folders and Volume Folders MAY have the same names.
-The `storagemanager` class will create Volume Folders before creating Volumes, and delete them after, so there are no dependency issues. However, parent folders must be defined before their children.
+Volume Folders can be created or destroyed by providing a Volume Folder definition to the `dellstorageprovisioning` class. Default values for Volume Folder properties can be set in the `dellstorageprovisioning::volume_folder` subclass. Multiple Volume Folders can be created in the same definition with the same properties by either providing multiple folder names in an array, or by specifying a number of folders to be created in a series. Multiple Volume Folder definitions can be provided within the `volume_folder_definition_array` that is passed to the dellstorageprovisioning class. All Volume Folders must have unique names. Server Folders and Volume Folders MAY have the same names.
+The `dellstorageprovisioning` class will create Volume Folders before creating Volumes, and delete them after, so there are no dependency issues. However, parent folders must be defined before their children.
 Volumes can be added to folders by listing the `folder_name` in the `volume_definition_array`.
 
-Example parameter for `storagemanager` class:
+Example parameter for `dellstorageprovisioning` class:
 ```
 volume_folder_definition_array => [{
 	folder_name => ['Parent Folder', 'Other Folder']
@@ -153,10 +153,10 @@ This example will create the following directory structure:
 
 ### Volumes
 
-Volumes can be created or destroyed by providing a volume definition to the `storagemanager` class. Default values for Volume properties can be set in the `storagemanager::volume` subclass. Multiple Volumes can be created in the same definition with the same properties by either providing multiple Volume names in an array or specifying a number of Volumes to be created in a series. Multiple volume definitions can be provided within the `volume_definition_array` that is passed to the `storagemanager` class. All Volumes must have unique names.
+Volumes can be created or destroyed by providing a volume definition to the `dellstorageprovisioning` class. Default values for Volume properties can be set in the `dellstorageprovisioning::volume` subclass. Multiple Volumes can be created in the same definition with the same properties by either providing multiple Volume names in an array or specifying a number of Volumes to be created in a series. Multiple volume definitions can be provided within the `volume_definition_array` that is passed to the `dellstorageprovisioning` class. All Volumes must have unique names.
 Volumes can be mapped to Servers as they are created by specifying a `server_name` in the `volume_definition_array`, or by using the `mapping_definition_array`.
 
-Example paramager for `storagemanager` class:
+Example paramager for `dellstorageprovisioning` class:
 ```
 volume_definition_array => [{
 	num_volumes => 25,
@@ -169,10 +169,10 @@ This definition array would create 25 Volumes named 'Volume01'-'Volume25' of siz
 
 ### Mapping
 
-Volumes can be mapped to Servers by providing a mapping definition to the `storagemanager` class. Default values for mapping properties can be set in the `storagemanager::mapping` subclass. Multiple Volumes can be mapped to the same Server by listing multiple Volume names in the `volume_name_array`. If the Volumes to be mapped are in a numbered series, only the lowest and hightest numbered Volumes need to be listed if `volume_name_array_is_range` is set to *true*. The `storagemanager::mapping` subclass will autogenerate the name of each Volume in the specified range.
+Volumes can be mapped to Servers by providing a mapping definition to the `dellstorageprovisioning` class. Default values for mapping properties can be set in the `dellstorageprovisioning::mapping` subclass. Multiple Volumes can be mapped to the same Server by listing multiple Volume names in the `volume_name_array`. If the Volumes to be mapped are in a numbered series, only the lowest and hightest numbered Volumes need to be listed if `volume_name_array_is_range` is set to *true*. The `dellstorageprovisioning::mapping` subclass will autogenerate the name of each Volume in the specified range.
 Volumes can also be mapped to Servers by listing a Server name in the Volume definition.
 
-Example parameter for `storagemanager` class:
+Example parameter for `dellstorageprovisioning` class:
 ```
 mapping_definition_array => [{
 	volume_name_array => ["OneVolume", "AnotherVolume", "ThirdVolume"],

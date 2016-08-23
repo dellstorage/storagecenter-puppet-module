@@ -2,7 +2,7 @@
 
 require 'puppet/files/dsm_api_server'
 
-Puppet::Type.type(:storagemanager_servercluster).provide(:servercluster_provider) do
+Puppet::Type.type(:dellstorageprovisioning_servercluster).provide(:servercluster_provider) do
 	@doc = 'Manage Server Cluster creation, modification, and deletion.'
 	
 	# Class variables reduce REST calls

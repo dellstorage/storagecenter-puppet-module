@@ -1,7 +1,7 @@
 # Handles server folder creation
 #
 # Sample Usage:
-#   class { 'storagemanager::server_folder':
+#   class { 'dellstorageprovisioning::server_folder':
 #     folder_definition_array => [{
 #       num_folders => 1,
 #       folder_name => 'Server Folder',
@@ -11,7 +11,7 @@
 #     }]
 #   }
 #
-class storagemanager::server_folder (
+class dellstorageprovisioning::server_folder (
   $folder_definition_array = [],
   # Server Folder property defaults
   $ensure                  = 'present', # Desired state of resource
@@ -91,7 +91,7 @@ class storagemanager::server_folder (
 	  }
 
     # Create folders with defined properties
-    storagemanager_server_folder { $name_array:
+    dellstorageprovisioning_server_folder { $name_array:
       ensure        => $folder_hash['ensure'],
       notes         => $folder_hash['notes'],
       parent   => $folder_hash['parent_name'],

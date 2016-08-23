@@ -1,6 +1,6 @@
 # Server Cluster custom type
 
-Puppet::Type.newtype(:storagemanager_servercluster) do
+Puppet::Type.newtype(:dellstorageprovisioning_servercluster) do
 	@doc = "Manage ServerCluster creation, modification, and deletion."
 	
 	ensurable

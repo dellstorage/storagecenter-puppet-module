@@ -1,7 +1,7 @@
 # Handles servercluster creation
 #
 # Sample Usage:
-#   class { 'storagemanager::server_cluster':
+#   class { 'dellstorageprovisioning::server_cluster':
 #     server_cluster_definition_array => [{
 #       num_servers => 5,
 #       cluster_name => 'Server Cluster',
@@ -11,7 +11,7 @@
 #     }]
 #   }
 #
-class storagemanager::server_cluster (
+class dellstorageprovisioning::server_cluster (
   # An array of hashes containing servercluster properties
   $server_cluster_definition_array = [],
   # Servercluster property defaults
@@ -94,7 +94,7 @@ class storagemanager::server_cluster (
 
     # Creates the number of serverclusters specified in the property hash
     # Creates the servercluster using the properties specified in the complete property hash.
-    storagemanager_servercluster { $name_array:
+    dellstorageprovisioning_servercluster { $name_array:
       ensure              => $server_cluster_hash['ensure'],
       alertonconnectivity => $server_cluster_hash['alert_on_connectivity'],
       alertonpartialconnectivity => $server_cluster_hash['alert_on_partial_connectivity'],

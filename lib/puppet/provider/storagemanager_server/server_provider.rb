@@ -1,7 +1,7 @@
 # Provider for server custom type
 require 'puppet/files/dsm_api_server'
 
-Puppet::Type.type(:storagemanager_server).provide(:server_provider) do
+Puppet::Type.type(:dellstorageprovisioning_server).provide(:server_provider) do
 	@doc = 'Manage server creation, modification, and deletion.'
 	
 	# Class variables decrease REST calls

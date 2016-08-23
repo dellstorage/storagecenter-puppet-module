@@ -1,6 +1,6 @@
 # Login custom type
 
-Puppet::Type.newtype(:storagemanager_login) do
+Puppet::Type.newtype(:dellstorageprovisioning_login) do
 	@doc = "Manage logging into Dell Storage Manager."
 	
 	ensurable

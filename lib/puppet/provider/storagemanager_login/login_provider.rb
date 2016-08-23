@@ -2,7 +2,7 @@
 
 require 'puppet/files/dsm_api_login'
 
-Puppet::Type.type(:storagemanager_login).provide(:login_provider) do
+Puppet::Type.type(:dellstorageprovisioning_login).provide(:login_provider) do
 	@doc = 'manage Login and cookie creation.'
 	
 	def create

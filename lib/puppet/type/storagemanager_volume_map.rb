@@ -1,6 +1,6 @@
 # Mapping custom type
 
-Puppet::Type.newtype(:storagemanager_volume_map) do
+Puppet::Type.newtype(:dellstorageprovisioning_volume_map) do
 	@doc = "Manage Mapping and Unmapping Volumes."
 	
 	ensurable

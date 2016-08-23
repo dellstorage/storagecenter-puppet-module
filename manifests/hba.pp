@@ -1,7 +1,7 @@
 # Manages adding and removing HBAs from Servers
 #
 # Sample Usage:
-#   class { 'storagemanager::hba':
+#   class { 'dellstorageprovisioning::hba':
 #     hba_definition_array => [{
 #       port_type => 'Iscsi',
 #       wwn_or_iscsi_name => 'iqn.yyyy-mm.naming-authority:unique.name',
@@ -10,7 +10,7 @@
 #     }]
 #   }
 #
-class storagemanager::hba (
+class dellstorageprovisioning::hba (
   $hba_definition_array = [],
   # HBA property defaults
   $ensure               = 'present', # Desired state of resource
@@ -45,7 +45,7 @@ class storagemanager::hba (
     }
 
     # Adds HBA
-    storagemanager_hba { $complete_property_hash['server_name']:
+    dellstorageprovisioning_hba { $complete_property_hash['server_name']:
       ensure        => $complete_property_hash['ensure'],
       allowmanual   => $complete_property_hash['allow_manual'],
       porttype      => $complete_property_hash['port_type'],

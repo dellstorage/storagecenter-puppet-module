@@ -1,6 +1,6 @@
 # Volume folder custom type
 
-Puppet::Type.newtype(:storagemanager_volume_folder) do
+Puppet::Type.newtype(:dellstorageprovisioning_volume_folder) do
 	@doc = "Manage creating and deleting volume and server folders."
 	
 	ensurable

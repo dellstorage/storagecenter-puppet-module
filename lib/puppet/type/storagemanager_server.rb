@@ -1,6 +1,6 @@
 # Server custom type
 
-Puppet::Type.newtype(:storagemanager_server) do
+Puppet::Type.newtype(:dellstorageprovisioning_server) do
 	@doc = "Manage Server creation, modification, and deletion."
 	
 	ensurable

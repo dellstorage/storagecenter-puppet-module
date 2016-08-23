@@ -1,5 +1,5 @@
 # HBA custom type
-Puppet::Type.newtype(:storagemanager_hba) do
+Puppet::Type.newtype(:dellstorageprovisioning_hba) do
 	@doc = "Manage Server HBA creation, modification, and deletion."
 	
 	ensurable

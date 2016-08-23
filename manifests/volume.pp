@@ -1,7 +1,7 @@
 # Handles volume creation
 #
 # Sample Usage:
-#   class { 'storagemanager::volume':
+#   class { 'dellstorageprovisioning::volume':
 #     volume_definition_array => [{
 #       num_volumes => 5,
 #       base_name => 'Volume',
@@ -12,7 +12,7 @@
 #     }]
 #   }
 #
-class storagemanager::volume (
+class dellstorageprovisioning::volume (
   # An array of hashes containing volume properties
   $volume_definition_array = [],
   # Volume property defaults -- documentation in Volume Type Definition.
@@ -108,7 +108,7 @@ class storagemanager::volume (
     }
 
     # Defines the volume using the properties specified in the property hash.
-    storagemanager_volume { $name_array:
+    dellstorageprovisioning_volume { $name_array:
       ensure               => $volume_hash['ensure'],
       datapagesize         => $volume_hash['data_page_size'],
       datareductionprofile => $volume_hash['data_reduction_profile'],
@@ -131,7 +131,7 @@ class storagemanager::volume (
     unless $volume_hash['server_name'] == '' {
       # No point in mapping deleted volumes
       if $volume_hash['ensure'] == 'present' {
-        storagemanager_volume_map { $name_array:
+        dellstorageprovisioning_volume_map { $name_array:
           ensure        => "present",
           servername    => $volume_hash['server_name'],
           storagecenter => $volume_hash['storage_center'],

@@ -4,11 +4,11 @@
 # Information on puppet main manifests:
 # https://docs.puppet.com/puppet/latest/reference/dirs_manifest.html
 # 
-# Set default values in 'storagemanager' and its subclasses
+# Set default values in 'dellstorageprovisioning' and its subclasses
 # 
 # The order in which these parameters are assigned is unimportant.
 #
-class { 'storagemanager': 
+class { 'dellstorageprovisioning': 
   ip_address => "100.00.00.00",
   password => "passw0rd",
   username => "user1",

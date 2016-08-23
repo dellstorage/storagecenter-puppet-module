@@ -2,7 +2,7 @@
 
 require 'puppet/files/dsm_api_volume'
 
-Puppet::Type.type(:storagemanager_volume).provide(:volume_provider) do
+Puppet::Type.type(:dellstorageprovisioning_volume).provide(:volume_provider) do
   @doc = 'Manage Volume creation, modification and deletion.'
   
 	# Class variables reduce REST calls

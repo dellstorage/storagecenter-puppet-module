@@ -1,7 +1,7 @@
 # Handles server creation
 #
 # Sample Usage:
-#   class { 'storagemanager::server':
+#   class { 'dellstorageprovisioning::server':
 #     server_definition_array => [{
 #       num_servers => 5,
 #       base_name => 'Server',
@@ -11,7 +11,7 @@
 #     }]
 #   }
 #
-class storagemanager::server (
+class dellstorageprovisioning::server (
   # An array of hashes containing server properties
   $server_definition_array       = [],
   # Server property defaults
@@ -106,7 +106,7 @@ class storagemanager::server (
     # Creates the number of servers specified in the property hash
     if $server_hash['is_server_cluster'] == true {
       # Creates a servercluster
-      storagemanager_servercluster { $name_array:
+      dellstorageprovisioning_servercluster { $name_array:
         ensure              => $server_hash['ensure'],
         alertonconnectivity => $server_hash['alert_on_connectivity'],
         alertonpartialconnectivity => $server_hash['alert_on_partial_connectivity'],
@@ -117,7 +117,7 @@ class storagemanager::server (
       }
     } else {
       # Creates a server
-      storagemanager_server { $name_array:
+      dellstorageprovisioning_server { $name_array:
         ensure          => $server_hash['ensure'],
         alertonconnectivity        => $server_hash['alert_on_connectivity'],
         alertonpartialconnectivity => $server_hash['alert_on_partial_connectivity'],
@@ -134,7 +134,7 @@ class storagemanager::server (
           # No point adding an HBA to a deleted volume.
           unless $server_hash['ensure'] == 'absent' {
             $name_array.each |$index, $name| {
-              storagemanager_hba { $name:
+              dellstorageprovisioning_hba { $name:
                 ensure        => 'present',
                 allowmanual   => false,
                 porttype      => $server_hash['port_type'],

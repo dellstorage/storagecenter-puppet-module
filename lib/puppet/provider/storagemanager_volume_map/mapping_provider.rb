@@ -3,7 +3,7 @@
 require 'puppet/files/dsm_api_volume'
 require 'puppet/files/dsm_api_server'
 
-Puppet::Type.type(:storagemanager_volume_map).provide(:mapping_provider) do
+Puppet::Type.type(:dellstorageprovisioning_volume_map).provide(:mapping_provider) do
 	@doc = 'Manage mapping/unmapping volumes.'
 	
 	# Class variables limit REST calls

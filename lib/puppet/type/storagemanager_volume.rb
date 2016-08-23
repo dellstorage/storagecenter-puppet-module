@@ -1,5 +1,5 @@
 # Volume custom type
-Puppet::Type.newtype(:storagemanager_volume) do
+Puppet::Type.newtype(:dellstorageprovisioning_volume) do
 	@doc = "Manage volume creation, modification and deletion."
   
 	ensurable

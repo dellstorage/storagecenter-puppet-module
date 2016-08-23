@@ -1,6 +1,6 @@
 # Handles mapping volumes to servers
 # Sample Usage:
-#   class { 'storagemanager::mapping':
+#   class { 'dellstorageprovisioning::mapping':
 #     mapping_definition_array => [{
 #       'ensure'            => 'present',
 #       'volume_name_array' => ['Volume01', 'Volume05'],
@@ -10,7 +10,7 @@
 #     }]
 #   }
 #
-class storagemanager::mapping (
+class dellstorageprovisioning::mapping (
   # An array of hashes containing mapping properties
   $mapping_definition_array   = [],
   # Mapping property defaults
@@ -46,7 +46,7 @@ class storagemanager::mapping (
     }
 
     # Creates mappings
-    storagemanager_volume_map { $full_volume_name_array:
+    dellstorageprovisioning_volume_map { $full_volume_name_array:
       ensure        => $complete_property_hash['ensure'],
       servername    => $complete_property_hash['server_name'],
       storagecenter => $complete_property_hash['storage_center'],

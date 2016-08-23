@@ -1,7 +1,7 @@
 # Handles volume folder creation
 #
 # Sample Usage:
-#   class { 'storagemanager::volume_folder':
+#   class { 'dellstorageprovisioning::volume_folder':
 #     folder_definition_array => [{
 #       num_folders => 1,
 #       base_name => 'Volume Folder',
@@ -11,7 +11,7 @@
 #     }]
 #   }
 #
-class storagemanager::volume_folder (
+class dellstorageprovisioning::volume_folder (
   $folder_definition_array = [],
   # Volume Folder property defaults
   $ensure                  = 'present', # Desired state of resource
@@ -89,7 +89,7 @@ class storagemanager::volume_folder (
     }
     
     # Defines the folder using the properties specified in the definition
-    storagemanager_volume_folder { $name_array:
+    dellstorageprovisioning_volume_folder { $name_array:
       ensure        => $folder_hash['ensure'],
       notes         => $folder_hash['notes'],
       parent   => $folder_hash['parent_name'],

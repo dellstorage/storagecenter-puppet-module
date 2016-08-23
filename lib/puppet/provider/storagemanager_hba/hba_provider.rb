@@ -2,7 +2,7 @@
 #
 require 'puppet/files/dsm_api_server'
 
-Puppet::Type.type(:storagemanager_hba).provide(:hba_provider) do
+Puppet::Type.type(:dellstorageprovisioning_hba).provide(:hba_provider) do
 	@doc = "Manage Server HBA creation, modification, and deletion."
 	
 	# Class variables reduce REST calls
