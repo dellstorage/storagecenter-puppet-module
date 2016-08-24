@@ -49,7 +49,7 @@ class DSMAPIRequest
 	
 	def self.check_resp(resp, url)
 		unless resp.code =~ /^2/
-			raise Puppet::Error, "Call to #{url} failed: #{resp.code} #{resp.message} #{resp.body}"
+			raise Puppet::Error, "Call to #{url} failed: #{resp.code} #{resp.message}: #{resp.body}"
 		end
 	end
 
@@ -109,19 +109,18 @@ class DSMAPIRequest
 	end
 		
 	
-	def self.login(ip, user, pass, folder_name)
-		Puppet.debug("Inside login method of DSMAPILogin.")
-		$base_url = "https://" + ip + ":3033/api/rest"
+	def self.login(ip, user, pass, folder_name, port_num)
+		Puppet.debug("Inside login method of DSMAPIRequest.")
+		$base_url = "https://" + ip + ":#{port_num}/api/rest"
 		@api_version = "3.0"
 		@content_type = "application/json"
 		url = "#{$base_url}/ApiConnection/Login"
-		url = DSMAPILogin.make_url(ip)
-		resp = DSMAPILogin.make_connection(url, user, pass)
+		resp = DSMAPIRequest.make_connection(url, user, pass)
 		cookie =
 			if resp.code =~ /^2/
 				resp["Set-Cookie"]
 			else
-				raise Puppet::Error, "Login as user '#{user}' failed: #{resp.code} #{resp.message}"
+				raise Puppet::Error, "Login as user '#{user}' failed: #{resp.code} #{resp.message}: #{resp.body}"
 				nil
 			end
 		

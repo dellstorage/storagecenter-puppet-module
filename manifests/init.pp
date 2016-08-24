@@ -19,13 +19,17 @@ class dellstorageprovisioning (
   $hba_definition_array            = [],
   # Toggles
   $tear_down = false,
-  $default_storage_center          = 66090,) {
+  $default_storage_center          = 66090,
+  # Configuration
+  $main_folder_name = "Puppet",
+  $port_number = 3033,) {
   # login to the dsm
   dellstorageprovisioning_login { "$ip_address":
-    puppetfoldername => "Puppet",
-    username => "$username",
-    password => "$password",
+    username => $username,
+    password => $password,
     ensure   => present,
+    main_folder_name => $main_folder_name,
+    port_number => $port_number,
   }
 
   if $tear_down == true {

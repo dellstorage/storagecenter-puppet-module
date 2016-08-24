@@ -18,13 +18,15 @@ The dellstorageprovisioning module has been designed to work with Foreman, Puppe
 
 ## Usage
 
+Unlike most Puppet Modules, the dellstorageprovisioning module does not affect the Server on which it is run. The Server the module runs on is used to send REST calls to the DSM Data Collector or Dell Storage Center. It possible but not necessary to have this module running on multiple Servers.
+
 ### Puppet Apply
 
 [Puppet Apply] (https://docs.puppet.com/puppet/latest/reference/man/apply.html) is the client-only application of a local manifest. The user should ensure that the dellstorageprovisioning module is located within an environment on Puppet's [environmentpath] (https://docs.puppet.com/4.6/reference/environments_configuring.html). The environmentpath can be set in puppet.conf, which is found in the [$confdir] (https://docs.puppet.com/puppet/4.6/reference/dirs_confdir.html).
 
 ### Puppet Agent
 
-[Puppet Agent] (https://docs.puppet.com/puppet/latest/reference/man/agent.html) retrieves a catalog from the remote server and applies it on the local system. This Puppet module will not affect the local system, but will instead make a series of REST calls from the local system to the DSM.
+[Puppet Agent] (https://docs.puppet.com/puppet/latest/reference/man/agent.html) retrieves a catalog from the remote server and applies it on the local system. Both the dellstorageprovisioning module and the stdlib module must be assigned to the local system.
 
 ### Foreman
 
@@ -48,7 +50,7 @@ Servers can be added to folders by listing the `folder_name` in the Server defin
 
 Example parameter for `dellstorageprovisioning` class:
 
-```
+```rb
 server_folder_definition_array => [{  
 	folder_name => ['Parent Folder', 'Other Folder']  
 }, {  
@@ -75,7 +77,7 @@ Server Clusters can be created or destroyed by providing a Server Cluster defini
 
 Example paramater for `dellstorageprovisioning` class:
 
-```
+```rb
 server_cluster_definition_array => [{  
 	num_clusters => 1,  
 	cluster_name => 'Cluster',  
@@ -93,7 +95,7 @@ HBAs can be added to Servers by either providing values to the `wwn_or_iscsi_nam
 
 Example Paramager for `dellstorageprovisioning` class:
 
-```
+```rb
 server_definition_array => [{
 	num_servers => 1,
 	do_not_number => true,
@@ -114,12 +116,12 @@ This `server_definition_array` will create one Server Cluster named 'Cluster' an
 
 ### HBAs
 
-HBAs can be added to or removed from Servers by providing an HBA definition to the `dellstorageprovisioning` class. Each definition should include the name of one Server and one WWN or iSCSI name, and the port type. Default values for HBA properties can be set in the `dellstorageprovisioning::hba` subclass. The `dellstorageprovisioning` class will create Servers before attempting to add HBAs, so there are no dependency issues.
+HBAs can be added to or removed from Servers by providing an HBA definition to the `dellstorageprovisioning` class. To remove an HBA, set the `ensure` property to 'absent'. Each definition should include the name of one Server and one WWN or iSCSI name, and the port type. Default values for HBA properties can be set in the `dellstorageprovisioning::hba` subclass. The `dellstorageprovisioning` class will create Servers before attempting to add HBAs, so there are no dependency issues.
 HBAs can also be added to Servers by listing the WWN or iSCSI name and port type in the `server_definition_array`.
 
 Example Parameter for `dellstorageprovisioning` class:
 
-```
+```rb
 hba_definition_array => [{
 	port_type => 'Iscsi',
 	wwn_or_iscsi_name => 'iscsi_name',
@@ -141,7 +143,7 @@ Volumes can be added to folders by listing the `folder_name` in the `volume_defi
 
 Example parameter for `dellstorageprovisioning` class:
 
-```
+```rb
 volume_folder_definition_array => [{
 	folder_name => ['Parent Folder', 'Other Folder']
 }, {
@@ -154,22 +156,22 @@ volume_folder_definition_array => [{
 This example will create the following directory structure:
 
 * puppet
-  * Parent Folder
-    * Folder01
-    * Folder02
-    * Folder03
-    * Folder04
-    * Folder05
-  * Other Folder
+	* Parent Folder
+		* Folder01
+		* Folder02
+		* Folder03
+		* Folder04
+		* Folder05
+	* Other Folder
 
 ### Volumes
 
 Volumes can be created or destroyed by providing a volume definition to the `dellstorageprovisioning` class. Default values for Volume properties can be set in the `dellstorageprovisioning::volume` subclass. Multiple Volumes can be created in the same definition with the same properties by either providing multiple Volume names in an array or specifying a number of Volumes to be created in a series. Multiple volume definitions can be provided within the `volume_definition_array` that is passed to the `dellstorageprovisioning` class. All Volumes must have unique names.
-Volumes can be mapped to Servers as they are created by specifying a `server_name` in the `volume_definition_array`, or by using the `mapping_definition_array`.
+Volumes can be mapped to Servers at any point by specifying a `server_name` in the `volume_definition_array`, or by using the `mapping_definition_array`.
 
-Example paramager for `dellstorageprovisioning` class:
+Example paramater for `dellstorageprovisioning` class:
 
-```
+```rb
 volume_definition_array => [{
 	num_volumes => 25,
 	volume_name => 'Volume',
@@ -182,12 +184,12 @@ This definition array would create 25 Volumes named 'Volume01'-'Volume25' of siz
 
 ### Mapping
 
-Volumes can be mapped to Servers by providing a mapping definition to the `dellstorageprovisioning` class. Default values for mapping properties can be set in the `dellstorageprovisioning::mapping` subclass. Multiple Volumes can be mapped to the same Server by listing multiple Volume names in the `volume_name_array`. If the Volumes to be mapped are in a numbered series, only the lowest and hightest numbered Volumes need to be listed if `volume_name_array_is_range` is set to *true*. The `dellstorageprovisioning::mapping` subclass will autogenerate the name of each Volume in the specified range.
+Volumes can be mapped to (or unmapped from) Servers by providing a mapping definition to the `dellstorageprovisioning` class. To unmap a Volume, set the `ensure` property to 'absent'. Default values for mapping properties can be set in the `dellstorageprovisioning::mapping` subclass. Multiple Volumes can be mapped to the same Server by listing multiple Volume names in the `volume_name_array`. If the Volumes to be mapped are in a numbered series, only the lowest and hightest numbered Volumes need to be listed if `volume_name_array_is_range` is set to *true*. The `dellstorageprovisioning::mapping` subclass will autogenerate the name of each Volume in the specified range.
 Volumes can also be mapped to Servers by listing a Server name in the Volume definition.
 
 Example parameter for `dellstorageprovisioning` class:
 
-```
+```rb
 mapping_definition_array => [{
 	volume_name_array => ["OneVolume", "AnotherVolume", "ThirdVolume"],
 	server_name => Server02,

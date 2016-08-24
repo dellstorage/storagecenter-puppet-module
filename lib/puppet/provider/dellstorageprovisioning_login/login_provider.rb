@@ -6,7 +6,7 @@ Puppet::Type.type(:dellstorageprovisioning_login).provide(:login_provider) do
 	@doc = 'manage Login and cookie creation.'
 	
 	def create
-		DSMAPILogin.login(@resource[:name], @resource[:username], @resource[:password], @resource[:puppetfoldername])
+		DSMAPIRequest.login(@resource[:name], @resource[:username], @resource[:password], @resource[:main_folder_name], @resource[:port_number])
 	end
 	
 	def destroy

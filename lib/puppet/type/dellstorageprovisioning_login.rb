@@ -4,7 +4,18 @@ Puppet::Type.newtype(:dellstorageprovisioning_login) do
 	@doc = "Manage logging into Dell Storage Manager."
 	
 	ensurable
-	newparam(:puppetfoldername) do
+	
+	newparam(:port_number) do
+		desc "The port number on which to connect to the DSM."
+		validate do |value|
+			value = value.to_s
+			unless value =~ /^[0-9]+$/
+				raise ArgumentError, "'%s' is not a valid port number." %value
+			end
+		end
+	end
+	
+	newparam(:main_folder_name) do
 		desc "The name of the top-level folder in which Puppet may work."
 		validate do |value|
 			unless value =~ /^[\p{Word}\s\-]+$/u
