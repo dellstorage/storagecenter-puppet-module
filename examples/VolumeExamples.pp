@@ -9,12 +9,7 @@ class { 'dellstorageprovisioning':
   server_definition_array        => [
     {
       server_name => [
-        "1MappingServer"],
-    }
-    ,
-    {
-      server_name    => [
-        "2MappingServer"],
+        "MappingServer"],
     }
     ],
   volume_folder_definition_array => [
@@ -55,7 +50,7 @@ class { 'dellstorageprovisioning':
       num_volumes => 5,
       size        => "100GB",
       folder_name => "SeriesFolder01",
-      server_name => "1MappingServer",
+      server_name => "MappingServer",
     }
     ,
     {
@@ -78,7 +73,7 @@ class { 'dellstorageprovisioning':
         "1-ArrayVolume",
         "2-ArrayVolume",
         "3-ArrayVolume"],
-      server_name       => "2MappingServer",
+      server_name       => "MappingServer",
     }
     ,
     {
@@ -86,7 +81,7 @@ class { 'dellstorageprovisioning':
         "SecondSeriesVolume01",
         "SecondSeriesVolume10"],
       volume_name_array_is_range => true,
-      server_name                => "1MappingServer",
+      server_name                => "MappingServer",
     }
     ],
 }
