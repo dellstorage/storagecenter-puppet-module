@@ -48,24 +48,24 @@ Servers can be added to folders by listing the `folder_name` in the Server defin
 
 Example parameter for `dellstorageprovisioning` class:
 ```
-server_folder_definition_array => [{
-	folder_name => ['Parent Folder', 'Other Folder']
-}, {
-	folder_name => 'Folder',
-	num_folders => 5,
-	parent_name => 'Parent Folder',
-}]
+server_folder_definition_array => [{  
+	folder_name => ['Parent Folder', 'Other Folder']  
+}, {  
+	folder_name => 'Folder',  
+	num_folders => 5,  
+	parent_name => 'Parent Folder',  
+}]  
 ```
 This example will create the following directory structure:
 
-* puppet
-  * Parent Folder
-    * Folder01
-    * Folder02
-    * Folder03
-    * Folder04
-    * Folder05
-  * Other Folder
+* puppet  
+  * Parent Folder  
+    * Folder01  
+    * Folder02  
+    * Folder03  
+    * Folder04  
+    * Folder05  
+  * Other Folder  
 
 ### Server Clusters
 
@@ -73,11 +73,11 @@ Server Clusters can be created or destroyed by providing a Server Cluster defini
 
 Example paramater for `dellstorageprovisioning` class:
 ```
-server_cluster_definition_array => [{
-	num_clusters => 1,
-	cluster_name => 'Cluster',
-	operating_system => 'operating-system-name',
-}]
+server_cluster_definition_array => [{  
+	num_clusters => 1,  
+	cluster_name => 'Cluster',  
+	operating_system => 'operating-system-name',  
+}]  
 ```
 This `server_cluster_definition_array` will create one Server Cluster named 'Cluster01'.
 
@@ -142,6 +142,7 @@ volume_folder_definition_array => [{
 }]
 ```
 This example will create the following directory structure:
+
 * puppet
   * Parent Folder
     * Folder01
