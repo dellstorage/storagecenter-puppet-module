@@ -43,6 +43,7 @@ class { 'dellstorageprovisioning':
       read_cache     => false,
       write_cache    => false,
       data_page_size => "Mb2",
+      server_name => "MappingServer",
     }
     ,
     {
@@ -50,13 +51,6 @@ class { 'dellstorageprovisioning':
       num_volumes => 5,
       size        => "100GB",
       folder_name => "SeriesFolder01",
-      server_name => "MappingServer",
-    }
-    ,
-    {
-      volume_name => "SecondSeriesVolume",
-      num_volumes => 10,
-      size        => "1GB",
     }
     ,
     {
@@ -78,8 +72,8 @@ class { 'dellstorageprovisioning':
     ,
     {
       volume_name_array          => [
-        "SecondSeriesVolume01",
-        "SecondSeriesVolume10"],
+        "SeriesVolume01",
+        "SeriesVolume05"],
       volume_name_array_is_range => true,
       server_name                => "MappingServer",
     }
