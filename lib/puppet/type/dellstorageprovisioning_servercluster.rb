@@ -42,11 +42,6 @@ Puppet::Type.newtype(:dellstorageprovisioning_servercluster) do
 	
 	newparam(:serverfolder) do
 		desc "Parent Folder for the Server Cluster."
-		validate do |value|
-			unless value =~ /^\w*$|^$/
-				raise ArgumentError, "'%s' is not a valid Server Folder name." %value
-			end
-		end
 	end
 	
 	newparam(:storagecenter) do

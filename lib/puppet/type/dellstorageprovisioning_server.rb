@@ -41,11 +41,6 @@ Puppet::Type.newtype(:dellstorageprovisioning_server) do
 	
 	newparam(:serverfolder) do
 		desc "The server folder name. Valid characters are a-z, 1-9, and underscore."
-		validate do |value|
-			unless value =~ /^\w*$|^$/
-				raise ArgumentError, "'%s' is not a valid initial volume folder name." % value
-			end
-		end
 	end
 	
 	newparam(:storagecenter) do

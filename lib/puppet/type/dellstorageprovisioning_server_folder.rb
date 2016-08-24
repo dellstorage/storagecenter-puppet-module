@@ -21,11 +21,6 @@ Puppet::Type.newtype(:dellstorageprovisioning_server_folder) do
 	
 	newparam(:parent) do
 		desc "Name of a parent folder."
-		validate do |value|
-			unless value =~ /^[\p{Word}\s\-]+$|^$/u
-				raise ArgumentError, "'%s' is not a valid parent folder name." % value
-			end
-		end
 	end
 	
 	newparam(:storagecenter) do

@@ -77,11 +77,6 @@ Puppet::Type.newtype(:dellstorageprovisioning_volume) do
 	
 	newparam(:volumefolder) do
 		desc "The volume folder name. Valid characters are a-z, 1-9, & underscore."
-		validate do |value|
-			unless value =~ /^\w|^$/
-				raise ArgumentError, "'%s' is not a valid initial volume folder name." % value
-			end
-		end
 	end
 	
 	newparam(:volumeqosprofile) do
