@@ -28,8 +28,8 @@ class DSMAPILogin
 		
 		req = Net::HTTP::Post.new(url.request_uri)
 		req.basic_auth(user, pass)
-		req["x-dell-api-version"] = "3.1.0.64"
-		req["Content-Type"] = "application/json"
+		req["x-dell-api-version"] = $api_version
+		req["Content-Type"] = $content_type
 		
 		resp = http.request(req)
 		
@@ -40,6 +40,8 @@ class DSMAPILogin
 	def self.login(ip, user, pass, folder_name)
 		Puppet.debug("Inside login method of DSMAPILogin.")
 		$base_url = "https://" + ip + ":3033/api/rest"
+		$api_version = "3.0"
+		$content_type = "application/json"
 		url = "#{$base_url}/ApiConnection/Login"
 		url = DSMAPILogin.make_url(ip)
 		resp = DSMAPILogin.make_connection(url, user, pass)

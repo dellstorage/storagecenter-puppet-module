@@ -22,6 +22,7 @@ class dellstorageprovisioning (
   $default_storage_center          = 66090,) {
   # login to the dsm
   dellstorageprovisioning_login { "$ip_address":
+    puppetfoldername => "Puppet",
     username => "$username",
     password => "$password",
     ensure   => present,

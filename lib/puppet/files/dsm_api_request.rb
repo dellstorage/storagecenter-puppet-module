@@ -1,9 +1,10 @@
+require 'base64'
 require 'net/https'
 require 'json'
 
 class DSMAPIRequest
 
-	attr_accessor :response, :code, :body, :message
+	attr_accessor :response, :code, :body, :message, :api_version, :content_type
 	
 	# Formatting methods
 	
@@ -13,8 +14,8 @@ class DSMAPIRequest
 	end
 	
 	def self.format_headers(req)
-		req["x-dell-api-version"] = "3.0"
-		req["Content-Type"] = "application/json"
+		req["x-dell-api-version"] = @api_version
+		req["Content-Type"] = @content_type
 		req["Cookie"] = $cookie
 		req
 	end
@@ -87,5 +88,48 @@ class DSMAPIRequest
 		
 		response = http.request(req)
 		response
+	end
+	
+	# Login methods
+	
+	def self.make_connection(url, user, pass)
+		Puppet.debug("Inside make_connection method of DSMAPIRequest.")
+		url = URI.parse(url)
+		
+		http = define_https(url)
+		
+		req = Net::HTTP::Post.new(url.request_uri)
+		req.basic_auth(user, pass)
+		req["x-dell-api-version"] = @api_version
+		req["Content-Type"] = @content_type
+		
+		response = http.request(req)
+		
+		response
+	end
+		
+	
+	def self.login(ip, user, pass, folder_name)
+		Puppet.debug("Inside login method of DSMAPILogin.")
+		$base_url = "https://" + ip + ":3033/api/rest"
+		@api_version = "3.0"
+		@content_type = "application/json"
+		url = "#{$base_url}/ApiConnection/Login"
+		url = DSMAPILogin.make_url(ip)
+		resp = DSMAPILogin.make_connection(url, user, pass)
+		cookie =
+			if resp.code =~ /^2/
+				resp["Set-Cookie"]
+			else
+				raise Puppet::Error, "Login as user '#{user}' failed: #{resp.code} #{resp.message}"
+				nil
+			end
+		
+		# This is the only method that writes these variables
+		$cookie = cookie
+		
+		$puppet_folder = folder_name
+		
+		Puppet.info "Login Successful."
 	end
 end
