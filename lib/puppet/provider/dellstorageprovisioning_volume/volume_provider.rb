@@ -57,11 +57,7 @@ Puppet::Type.type(:dellstorageprovisioning_volume).provide(:volume_provider) do
 			payload["StorageProfile"] = @resource[:storageprofile].to_i
 		end
 		
-		volumefolder = @resource[:volumefolder]
-		if volumefolder == ''
-			volumefolder = "puppet"
-		end
-		payload["VolumeFolder"] = volumefolder
+		payload["VolumeFolder"] = @resource[:volumefolder]
 		
 		unless @resource[:volumeqosprofile] == ''
 			payload["VolumeQosProfile"] = @resource[:volumeqosprofile].to_i

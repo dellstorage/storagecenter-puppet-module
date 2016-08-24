@@ -26,11 +26,7 @@ Puppet::Type.type(:dellstorageprovisioning_servercluster).provide(:servercluster
 		
 		payload["OperatingSystem"] = @resource[:operatingsystem]
 		
-		serverfolder = @resource[:serverfolder]
-		if serverfolder == ''
-			serverfolder = "puppet"
-		end
-		payload["ServerFolder"] = serverfolder
+		payload["ServerFolder"] = @resource[:serverfolder]
 		
 		payload
 	end
