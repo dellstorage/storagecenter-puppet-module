@@ -36,6 +36,68 @@ Note: It is only necessary to assign the main dellstorageprovisioning class to t
 
 Helpful Links: [Puppet Architecture] (https://docs.puppet.com/3.8/reference/architecture.html)
 
+## Testing
+
+### Example Manifests
+
+Two example manifests are included in the `examples` folder. These can be used as a reference for writing manifests or filling in parameters in Foreman. They can also be run via Puppet Apply as tests to ensure full functionality, as they utilize every method of creating each object with different properties.
+
+The state of the Storage Center after running `examples/VolumeExamples.pp` should be:
+
+**Volumes**
+
+* Puppet
+	* 1-ArrayFolder
+	* 2-ArrayFolder
+	* 3-ArrayFolder
+	* SingleFolder
+		* SeriesFolder01
+			* SeriesVolume01
+			* SeriesVolume02
+			* SeriesVolume03
+			* SeriesVolume04
+			* SeriesVolume05
+		* SeriesFolder02
+		* SeriesFolder03
+	* 1-ArrayVolume
+	* 2-ArrayVolume
+	* 3-ArrayVolume
+	* SingleVolume
+
+**Servers**
+
+* Puppet
+	* MappingServer
+	
+All of the Volumes should be mapped to `MappingServer`.
+
+The state of the Storage Center after running `examples/ServerExamples.pp` should be:
+
+**Servers**
+
+* Puppet
+	* 1-ArrayFolder
+		* 1-ArrayCluster
+			* 1-ArrayServer
+			* 2-ArrayServer
+		* 2-ArrayCluster
+	* 2-ArrayFolder
+	* 3-ArrayFolder
+	* SingleFolder
+		* SeriesFolder01
+			* SeriesCluster01
+			* SeriesCluster02
+			* SeriesServer01
+			* SeriesServer02
+			* SeriesServer03
+			* SeriesServer04
+			* SeriesServer05
+		* SeriesFolder02
+		* SeriesFolder03
+	* ClusterServer
+	* SingleCluster
+	* SingleServer
+
 ## Resource Types
 
 ### Login
