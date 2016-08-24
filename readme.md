@@ -47,6 +47,7 @@ The `dellstorageprovisioning` class will create Server Folders before creating S
 Servers can be added to folders by listing the `folder_name` in the Server definiton.
 
 Example parameter for `dellstorageprovisioning` class:
+
 ```
 server_folder_definition_array => [{  
 	folder_name => ['Parent Folder', 'Other Folder']  
@@ -56,22 +57,24 @@ server_folder_definition_array => [{
 	parent_name => 'Parent Folder',  
 }]  
 ```
+
 This example will create the following directory structure:
 
 * puppet  
-  * Parent Folder  
-    * Folder01  
-    * Folder02  
-    * Folder03  
-    * Folder04  
-    * Folder05  
-  * Other Folder  
+	* Parent Folder  
+		* Folder01  
+		* Folder02  
+		* Folder03  
+		* Folder04  
+		* Folder05  
+	* Other Folder  
 
 ### Server Clusters
 
 Server Clusters can be created or destroyed by providing a Server Cluster definition to the `dellstorageprovisioning` class. Default values for cluster properties can be set in the `dellstorageprovisioning::server_cluster` subclass. Multiple clusters can be created in the same definition with the same properties by either providing multiple cluster names in the array, or by specifying a number of clusters to be created in a series. Multiple cluster definitions can be provided within the `server_cluster_definition_array` that is passed to the `dellstorageprovisioning` class. All Server Clusters must have unique names. Servers and Server Clusters cannot have the same names. Server Clusters defined in the `server_cluster_definition_array` will always be created before Servers defined in the `server_definition_array`, and deleted after, so there are no dependency issues.
 
 Example paramater for `dellstorageprovisioning` class:
+
 ```
 server_cluster_definition_array => [{  
 	num_clusters => 1,  
@@ -79,6 +82,7 @@ server_cluster_definition_array => [{
 	operating_system => 'operating-system-name',  
 }]  
 ```
+
 This `server_cluster_definition_array` will create one Server Cluster named 'Cluster01'.
 
 ### Servers
@@ -88,6 +92,7 @@ Server Clusters can be created within the `server_definition_array` by setting t
 HBAs can be added to Servers by either providing values to the `wwn_or_iscsi_name` and `port_type` parameters, or by using the `hba_definition_array`. If creating multiple Servers in one definition, the WWN or iSCSI names must be in an array with one WWN or iSCSI name per Server being created, listed in the same order as the Servers they are to be assigned to.
 
 Example Paramager for `dellstorageprovisioning` class:
+
 ```
 server_definition_array => [{
 	num_servers => 1,
@@ -104,6 +109,7 @@ server_definition_array => [{
 	operating_system => 'operating-system-name',
 }]
 ```
+
 This `server_definition_array` will create one Server Cluster named 'Cluster' and 5 Servers named 'Server01'-'Server05' with HBAs 1-5. Servers 'Server01'-'Server05' will all be added to the 'Cluster' Server Cluster.
 
 ### HBAs
@@ -112,6 +118,7 @@ HBAs can be added to or removed from Servers by providing an HBA definition to t
 HBAs can also be added to Servers by listing the WWN or iSCSI name and port type in the `server_definition_array`.
 
 Example Parameter for `dellstorageprovisioning` class:
+
 ```
 hba_definition_array => [{
 	port_type => 'Iscsi',
@@ -123,6 +130,7 @@ hba_definition_array => [{
 	server_name => 'Server02',
 }]
 ```
+
 This example will add HBAs to both Server01 and Server02.
 
 ### Volume Folders
@@ -132,6 +140,7 @@ The `dellstorageprovisioning` class will create Volume Folders before creating V
 Volumes can be added to folders by listing the `folder_name` in the `volume_definition_array`.
 
 Example parameter for `dellstorageprovisioning` class:
+
 ```
 volume_folder_definition_array => [{
 	folder_name => ['Parent Folder', 'Other Folder']
@@ -141,6 +150,7 @@ volume_folder_definition_array => [{
 	parent_name => 'Parent Folder',
 }]
 ```
+
 This example will create the following directory structure:
 
 * puppet
@@ -158,6 +168,7 @@ Volumes can be created or destroyed by providing a volume definition to the `del
 Volumes can be mapped to Servers as they are created by specifying a `server_name` in the `volume_definition_array`, or by using the `mapping_definition_array`.
 
 Example paramager for `dellstorageprovisioning` class:
+
 ```
 volume_definition_array => [{
 	num_volumes => 25,
@@ -166,6 +177,7 @@ volume_definition_array => [{
 	size => 100GB,
 }]
 ```
+
 This definition array would create 25 Volumes named 'Volume01'-'Volume25' of size 100GB and map them to 'Server01'.
 
 ### Mapping
@@ -174,6 +186,7 @@ Volumes can be mapped to Servers by providing a mapping definition to the `dells
 Volumes can also be mapped to Servers by listing a Server name in the Volume definition.
 
 Example parameter for `dellstorageprovisioning` class:
+
 ```
 mapping_definition_array => [{
 	volume_name_array => ["OneVolume", "AnotherVolume", "ThirdVolume"],
@@ -184,6 +197,7 @@ mapping_definition_array => [{
 	volume_name_array_is_range => true,
 }]
 ```
+
 This example would map Volumes 'OneVolume', 'AnotherVolume', 'ThirdVolume', and 'ExampleVolume01'-'ExampleVolume25' to 'Server02'.
 
 ## Limitations
