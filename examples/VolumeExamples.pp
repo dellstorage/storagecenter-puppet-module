@@ -1,3 +1,17 @@
+#    Copyright 2016 Dell Inc.
+#
+#    Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
+#
 # This is an example manifest showing how to create Volumes, Volume Folders, and mappings between Volumes and Servers.
 # Fill in the information at the top of the file.
 class { 'dellstorageprovisioning':
@@ -6,10 +20,8 @@ class { 'dellstorageprovisioning':
   username   => "YOUR USERNAME",
   tear_down  => false, # Change to 'true' to remove set-up
   default_storage_center         => "YOUR SC ID",
-  server_definition_array        => [
-    {
-      server_name => [
-        "MappingServer"],
+  server_definition_array        => [{
+      server_name => ["MappingServer"],
     }
     ],
   volume_folder_definition_array => [
@@ -27,7 +39,7 @@ class { 'dellstorageprovisioning':
     }
     ,
     {
-      folder_name    => [
+      folder_name => [
         "1-ArrayFolder",
         "2-ArrayFolder",
         "3-ArrayFolder"],
@@ -43,7 +55,7 @@ class { 'dellstorageprovisioning':
       read_cache     => false,
       write_cache    => false,
       data_page_size => "Mb2",
-      server_name => "MappingServer",
+      server_name    => "MappingServer",
     }
     ,
     {
@@ -54,11 +66,11 @@ class { 'dellstorageprovisioning':
     }
     ,
     {
-      volume_name    => [
+      volume_name => [
         "1-ArrayVolume",
         "2-ArrayVolume",
         "3-ArrayVolume"],
-      size           => "10GB",
+      size        => "10GB",
     }
     ],
   mapping_definition_array       => [

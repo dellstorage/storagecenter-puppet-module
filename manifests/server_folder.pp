@@ -1,3 +1,17 @@
+#    Copyright 2016 Dell Inc.
+#
+#    Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
+#
 # Handles server folder creation
 #
 # Sample Usage:
@@ -20,7 +34,7 @@ class dellstorageprovisioning::server_folder (
   $storage_center, # StorageCenter InstanceId
   # Variables
   $num_folders             = 0, # Number of folders to create with the specified properties
-  $folder_name               = '', # Base name to create  the folder with
+  $folder_name             = '', # Base name to create  the folder with
   $do_not_number           = true,
   $tear_down               = false, # Delete all folders defined
   ) {
@@ -32,7 +46,7 @@ class dellstorageprovisioning::server_folder (
     parent_name    => $parent_name,
     storage_center => $storage_center,
     num_folders    => $num_folders,
-    folder_name      => $folder_name,
+    folder_name    => $folder_name,
     do_not_number  => $do_not_number,
   }
 
@@ -68,33 +82,33 @@ class dellstorageprovisioning::server_folder (
     }
 
     # Naming
-    if $folder_hash['folder_name'].is_array == true {
+    if $folder_hash['folder_name'] . is_array == true {
       validate_array($folder_hash['folder_name'])
       $name_array = $folder_hash['folder_name']
     } else {
-	    if $folder_hash['num_folders'] == 1 {
-	      if $folder_hash['do_not_number'] == true {
-	        # Leave folder un-numbered
-	        $name_array = $folder_hash['folder_name']
-	      }
-	    } else {
-	      # Create an array of folders
-	      if $folder_hash['num_folders'] < 10 {
-	        # Add leading zero
-	        $num = "0${folder_hash['num_folders']}"
-	      } else {
-	        $num = "${folder_hash['num_folders']}"
-	      }
-	      # Array of folders from 01 to num_folders
-	      $name_array = range("${folder_hash['folder_name']}01", "${folder_hash['folder_name']}${num}")
-	    }
-	  }
+      if $folder_hash['num_folders'] == 1 {
+        if $folder_hash['do_not_number'] == true {
+          # Leave folder un-numbered
+          $name_array = $folder_hash['folder_name']
+        }
+      } else {
+        # Create an array of folders
+        if $folder_hash['num_folders'] < 10 {
+          # Add leading zero
+          $num = "0${folder_hash['num_folders']}"
+        } else {
+          $num = "${folder_hash['num_folders']}"
+        }
+        # Array of folders from 01 to num_folders
+        $name_array = range("${folder_hash['folder_name']}01", "${folder_hash['folder_name']}${num}")
+      }
+    }
 
     # Create folders with defined properties
     dellstorageprovisioning_server_folder { $name_array:
       ensure        => $folder_hash['ensure'],
       notes         => $folder_hash['notes'],
-      parent   => $folder_hash['parent_name'],
+      parent        => $folder_hash['parent_name'],
       storagecenter => $folder_hash['storage_center'],
     }
   }

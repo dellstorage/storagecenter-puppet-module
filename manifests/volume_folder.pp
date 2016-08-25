@@ -1,3 +1,17 @@
+#    Copyright 2016 Dell Inc.
+#
+#    Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
+#
 # Handles volume folder creation
 #
 # Sample Usage:
@@ -70,29 +84,29 @@ class dellstorageprovisioning::volume_folder (
       validate_array($folder_hash['folder_name'])
       $name_array = $folder_hash['folder_name']
     } else {
-	    if $folder_hash['num_folders'] == 1 {
-	      if $folder_hash['do_not_number'] == true {
-	        # Leave name as-is
-	        $name_array = $folder_hash['folder_name']
-	      }
-	    } else {
-	      # Create a range of numbered folders
-	      if $folder_hash['num_folders'] < 10 {
-	        # Add a leading zero to end of range
-	        $num = "0${folder_hash['num_folders']}"
-	      } else {
-	        $num = "${folder_hash['num_folders']}"
-	      }
-	      # Create an array of folders from 01 to num_folders
-	      $name_array = range("${folder_hash['folder_name']}01", "${folder_hash['folder_name']}${num}")
-	    }
+      if $folder_hash['num_folders'] == 1 {
+        if $folder_hash['do_not_number'] == true {
+          # Leave name as-is
+          $name_array = $folder_hash['folder_name']
+        }
+      } else {
+        # Create a range of numbered folders
+        if $folder_hash['num_folders'] < 10 {
+          # Add a leading zero to end of range
+          $num = "0${folder_hash['num_folders']}"
+        } else {
+          $num = "${folder_hash['num_folders']}"
+        }
+        # Create an array of folders from 01 to num_folders
+        $name_array = range("${folder_hash['folder_name']}01", "${folder_hash['folder_name']}${num}")
+      }
     }
-    
+
     # Defines the folder using the properties specified in the definition
     dellstorageprovisioning_volume_folder { $name_array:
       ensure        => $folder_hash['ensure'],
       notes         => $folder_hash['notes'],
-      parent   => $folder_hash['parent_name'],
+      parent        => $folder_hash['parent_name'],
       storagecenter => $folder_hash['storage_center'],
     }
   }

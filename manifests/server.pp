@@ -1,3 +1,17 @@
+#    Copyright 2016 Dell Inc.
+#
+#    Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
+#
 # Handles server creation
 #
 # Sample Usage:
@@ -118,14 +132,14 @@ class dellstorageprovisioning::server (
     } else {
       # Creates a server
       dellstorageprovisioning_server { $name_array:
-        ensure          => $server_hash['ensure'],
-        alertonconnectivity        => $server_hash['alert_on_connectivity'],
+        ensure              => $server_hash['ensure'],
+        alertonconnectivity => $server_hash['alert_on_connectivity'],
         alertonpartialconnectivity => $server_hash['alert_on_partial_connectivity'],
-        notes           => $server_hash['notes'],
-        operatingsystem => $server_hash['operating_system'],
-        parent     => $server_hash['parent_name'],
-        serverfolder    => $server_hash['folder_name'],
-        storagecenter   => $server_hash['storage_center'],
+        notes               => $server_hash['notes'],
+        operatingsystem     => $server_hash['operating_system'],
+        parent              => $server_hash['parent_name'],
+        serverfolder        => $server_hash['folder_name'],
+        storagecenter       => $server_hash['storage_center'],
       }
 
       # Adds HBA when provided
@@ -133,13 +147,26 @@ class dellstorageprovisioning::server (
         unless $server_hash['port_type'] == '' {
           # No point adding an HBA to a deleted volume.
           unless $server_hash['ensure'] == 'absent' {
-            $name_array.each |$index, $name| {
-              dellstorageprovisioning_hba { $name:
+            if $name_array.is_string == true {
+              dellstorageprovisioning_hba { $name_array:
                 ensure        => 'present',
                 allowmanual   => false,
                 porttype      => $server_hash['port_type'],
                 storagecenter => $server_hash['storage_center'],
-                wwn           => $server_hash['wwn_or_iscsi_name'][$index],
+                wwn           => $server_hash['wwn_or_iscsi_name']
+              }
+            } else {
+              if $server_hash['wwn_or_iscsi_name'] . is_string == true {
+                fail "Must provide one WWN or iSCSI name per Server."
+              }
+              $name_array.each |$index, $name| {
+                dellstorageprovisioning_hba { $name:
+                  ensure        => 'present',
+                  allowmanual   => false,
+                  porttype      => $server_hash['port_type'],
+                  storagecenter => $server_hash['storage_center'],
+                  wwn           => $server_hash['wwn_or_iscsi_name'][$index],
+                }
               }
             }
           }
