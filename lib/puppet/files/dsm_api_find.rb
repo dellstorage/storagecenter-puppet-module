@@ -24,6 +24,24 @@ class DSMAPIFind
 		list
 	end
 	
+	def self.find_os(name)
+		Puppet.debug "Inside find_os method of DSMAPIFind."
+		
+		# Make call to find OS
+		url = "#{$base_url}/StorageCenter/ScServerOperatingSystem/GetList"
+		filter = DSMAPIRequest.define_filter([["name", name, "Equals"]])
+		os_list = find(url, filter)
+		
+		# Handle Response 
+		id = find_in_response_array(os_list, "instanceId")
+		if id
+			Puppet.info "Found Operating System '#{name}' with id #{id}."
+		else
+			raise ArgumentError, "Operating System '#{name}' is unsupported."
+		end
+		id
+	end
+	
 	def self.find_server(name, sc)
 		Puppet.debug "Inside find_server method of DSMAPIFind."
 		
@@ -74,6 +92,35 @@ class DSMAPIFind
 		
 		# Return id
 		id
+	end
+	
+	def self.find_hba(serv_id, wwn_or_iscsi_name)
+		Puppet.debug "Inside find_hba method of DSMAPIFind."
+		
+		# Make call to find HBA
+		url = "#{$base_url}/StorageCenter/ScServer/#{serv_id}/HbaList"
+		
+		#Handle Response
+		resp = DSMAPIRequest.get(url)
+		DSMAPIRequest.check_resp(resp, url)
+		
+		# Retrieve list of HBAs
+		hba_list = JSON.parse(resp.body)
+		hba_id = nil
+		if hba_list.empty?
+			return hba_id
+		end
+		
+		# Response is returned as an array
+		# Array will only contain one item
+		hba_list.each do |hba|
+			if hba["iscsiName"] == wwn_or_iscsi_name
+				hba_id = hba["instanceId"]
+			end
+		end
+		
+		# Return id
+		hba_id
 	end
 	
 	def self.find_in_response_array(resp_array, str)

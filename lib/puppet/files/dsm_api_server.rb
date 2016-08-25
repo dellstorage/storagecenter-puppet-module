@@ -37,7 +37,7 @@ class DSMAPIServer
 		
 		# Look up Operating System InstanceId
 		if payload["OperatingSystem"]
-			payload["OperatingSystem"] = find_os(payload["OperatingSystem"])
+			payload["OperatingSystem"] = DSMAPIFind.find_os(payload["OperatingSystem"])
 		end
 
 		# Make call to create a new server
@@ -126,52 +126,10 @@ class DSMAPIServer
 		# Return id
 		serv_id
 	end
-	
+
 	def self.find_hba(serv_id, wwn_or_iscsi_name)
-		Puppet.debug "Inside find_hba method of DSMAPIServer."
-		
-		# Make call to find HBA
-		url = "#{$base_url}/StorageCenter/ScServer/#{serv_id}/HbaList"
-		
-		#Handle Response
-		resp = DSMAPIRequest.get(url)
-		DSMAPIRequest.check_resp(resp, url)
-		
-		# Retrieve list of HBAs
-		hba_list = JSON.parse(resp.body)
-		hba_id = nil
-		if hba_list.empty?
-			return hba_id
-		end
-		
-		# Response is returned as an array
-		# Array will only contain one item
-		hba_list.each do |hba|
-			if hba["iscsiName"] == wwn_or_iscsi_name
-				hba_id = hba["instanceId"]
-			end
-		end
-		
-		# Return id
+		hba_id = DSMAPIFind.find_hba(serv_id, wwn_or_iscsi_name)
 		hba_id
-	end
-	
-	def self.find_os(name)
-		Puppet.debug "Inside find_os method of DSMAPIServer."
-		
-		# Make call to find OS
-		url = "#{$base_url}/StorageCenter/ScServerOperatingSystem/GetList"
-		filter = DSMAPIRequest.define_filter([["name", name, "Equals"]])
-		os_list = DSMAPIFind.find(url, filter)
-		
-		# Handle Response 
-		id = DSMAPIFind.find_in_response_array(os_list, "instanceId")
-		if id
-			Puppet.info "Found Operating System '#{name}' with id #{id}."
-		else
-			raise ArgumentError, "Operating System '#{name}' is unsupported."
-		end
-		id
 	end
 	
 	def self.assign_parent(parent_name, sc, payload)
