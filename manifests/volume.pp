@@ -138,7 +138,7 @@ class dellstorageprovisioning::volume (
       storagetype          => $volume_hash['storage_type'],
       volumefolder         => $volume_hash['folder_name'],
       volumeqosprofile     => $volume_hash['volume_qos_profile'],
-      writecache           => $volume_hash['write_cache'],;
+      writecache           => $volume_hash['write_cache'],
     }
 
     # Map the volume if server name is provided

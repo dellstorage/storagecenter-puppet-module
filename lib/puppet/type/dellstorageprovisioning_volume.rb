@@ -30,18 +30,13 @@ Puppet::Type.newtype(:dellstorageprovisioning_volume) do
 		desc "The disk folder to be used by the volume."
 	end
 	
-	newparam(:GroupQosProfile) do
+	newparam(:groupqosprofile) do
 		desc "When provided, the volume will be created with this group profile set."
 	end
 
 	newparam(:name) do
 		desc "The volume name. Valid characters are a-z, 1-9, & underscore."
 		isnamevar
-		validate do |value|
-			unless value =~ /^[\p{Word}\s\-]+$/u
-				raise ArgumentError, "'%s' is not a valid initial volume name." % value
-			end
-		end
 	end
 	
 	newparam(:notes) do
@@ -50,7 +45,7 @@ Puppet::Type.newtype(:dellstorageprovisioning_volume) do
 	
 	newparam(:readcache, :boolean => true) do
 		desc "Enable readcache."
-		newvalues(:true, :false, /^$/)
+		newvalues(:true, :false)
 		defaultto :true
 	end
 	
@@ -64,11 +59,6 @@ Puppet::Type.newtype(:dellstorageprovisioning_volume) do
 	
 	newparam(:size) do
 		desc "Configured size for the volume."
-		validate do |value|
-			unless value =~ /^\d+(KB|MB|GB|TB$)|^$/
-				raise ArgumentError, "'%s' is not a valid initial volume size." % value
-			end
-		end
 	end
 	
 	newparam(:storagecenter) do
@@ -99,7 +89,7 @@ Puppet::Type.newtype(:dellstorageprovisioning_volume) do
 	
 	newparam(:writecache, :boolean => true) do
 		desc "Enable writecache."
-		newvalues(:true, :false, /^$/)
+		newvalues(:true, :false)
 		defaultto :true
 	end
 end

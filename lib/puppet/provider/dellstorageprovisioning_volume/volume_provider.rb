@@ -77,13 +77,10 @@ Puppet::Type.type(:dellstorageprovisioning_volume).provide(:volume_provider) do
 			payload["VolumeQosProfile"] = @resource[:volumeqosprofile].to_i
 		end
 		
-		unless @resource[:writecache] = ''
-			payload["WriteCache"] = 
-				if @resource[:writecache] == :true
-					true
-				else
-					false
-				end
+		if @resource[:writecache] = :false
+			payload["WriteCache"] = false
+		else
+			payload["WriteCache"] = true
 		end
 		
 		payload
