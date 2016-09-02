@@ -15,7 +15,7 @@
 # Provider for login custom type
 # The login provider will always return false due to credential timeout
 #
-require 'puppet/files/dsm_api_login'
+require 'puppet/files/dsm_api_require'
 
 Puppet::Type.type(:dellstorageprovisioning_login).provide(:login_provider) do
 	@doc = 'manage Login and cookie creation.'
