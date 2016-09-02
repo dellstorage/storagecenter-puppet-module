@@ -13,7 +13,8 @@
 #    under the License.
 #
 # Provider for mapping custom type
-
+# The provider tells Puppet what to do with the defind mapping.
+#
 require 'puppet/files/dsm_api_volume'
 require 'puppet/files/dsm_api_server'
 
@@ -23,7 +24,10 @@ Puppet::Type.type(:dellstorageprovisioning_volume_map).provide(:mapping_provider
 	# Class variables limit REST calls
 	@vol_id = nil
 	
+	# Mapping volume to server
 	def create
+		Puppet.info "Mapping Volume '#{@resource[:name]}' to Server '#{@resource[:servername]}'."
+		Puppet.debug "Storage Center: #{@resource[:storagecenter]}"
 		# Find server
 		serv_id = DSMAPIServer.find_server(@resource[:servername], @resource[:storagecenter])
 		if serv_id == nil
@@ -32,10 +36,13 @@ Puppet::Type.type(:dellstorageprovisioning_volume_map).provide(:mapping_provider
 		DSMAPIVolume.map_to_server(@vol_id, serv_id)
 	end
 	
+	# Unmapping volume from server
 	def destroy
+		Puppet.info "Unmapping Volume '#{@resource[:name]}' from Server '#{@resource[:servername]}'."
 		DSMAPIVolume.unmap(@vol_id)
 	end
 	
+	# Determining whether volume has mapping
 	# This method is always called first
 	def exists?
 		# Find volume

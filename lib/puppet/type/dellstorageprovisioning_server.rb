@@ -13,7 +13,8 @@
 #    under the License.
 #
 # Server custom type
-
+# This file presents a Server and its properties to Puppet as an object that it can manage.
+#
 Puppet::Type.newtype(:dellstorageprovisioning_server) do
 	@doc = "Manage Server creation, modification, and deletion."
 	

@@ -13,7 +13,9 @@
 #    under the License.
 #
 # Login custom type
-
+# This file presents logging in to Puppet as an object that it can manage.
+# Allows the user to customize and configure the system setup as the attributes of a 'login' object.
+#
 Puppet::Type.newtype(:dellstorageprovisioning_login) do
 	@doc = "Manage logging into Dell Storage Manager."
 	

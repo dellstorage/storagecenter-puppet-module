@@ -13,6 +13,7 @@
 #    under the License.
 #
 # Handles server folder creation
+# Defaults can be set in this subclass
 #
 # Sample Usage:
 #   class { 'dellstorageprovisioning::server_folder':
@@ -24,6 +25,7 @@
 #       storage_center => 12345,
 #     }]
 #   }
+# This sample parameter could also be passed to the main init.pp class with the same effect.
 #
 class dellstorageprovisioning::server_folder (
   $folder_definition_array = [],
@@ -104,7 +106,7 @@ class dellstorageprovisioning::server_folder (
       }
     }
 
-    # Create folders with defined properties
+    # Resource Type definition for Server Folder
     dellstorageprovisioning_server_folder { $name_array:
       ensure        => $folder_hash['ensure'],
       notes         => $folder_hash['notes'],

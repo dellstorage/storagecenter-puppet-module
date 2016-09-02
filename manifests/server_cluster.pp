@@ -13,6 +13,7 @@
 #    under the License.
 #
 # Handles servercluster creation
+# Defaults can be set in this subclass
 #
 # Sample Usage:
 #   class { 'dellstorageprovisioning::server_cluster':
@@ -24,6 +25,7 @@
 #       storage_center => 12345,
 #     }]
 #   }
+# This sample parameter could also be passed to the main init.pp class with the same effect.
 #
 class dellstorageprovisioning::server_cluster (
   # An array of hashes containing servercluster properties
@@ -106,6 +108,7 @@ class dellstorageprovisioning::server_cluster (
       }
     }
 
+    # Resource Type definition for Server Cluster
     # Creates the number of serverclusters specified in the property hash
     # Creates the servercluster using the properties specified in the complete property hash.
     dellstorageprovisioning_servercluster { $name_array:

@@ -13,13 +13,16 @@
 #    under the License.
 #
 # Provider for login custom type
-
+# The login provider will always return false due to credential timeout
+#
 require 'puppet/files/dsm_api_login'
 
 Puppet::Type.type(:dellstorageprovisioning_login).provide(:login_provider) do
 	@doc = 'manage Login and cookie creation.'
 	
+	# Logging in
 	def create
+		Puppet.info "Logging in as #{@resource[:username]}."
 		DSMAPIRequest.login(@resource[:name], @resource[:username], @resource[:password], @resource[:main_folder_name], @resource[:port_number])
 	end
 	

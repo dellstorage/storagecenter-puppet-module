@@ -13,6 +13,8 @@
 #    under the License.
 #
 # Handles mapping volumes to servers
+# Defaults can be set in this subclass
+#
 # Sample Usage:
 #   class { 'dellstorageprovisioning::mapping':
 #     mapping_definition_array => [{
@@ -23,6 +25,7 @@
 #       'storagecenter'    => 12345,
 #     }]
 #   }
+# This sample parameter could also be passed to the main init.pp class with the same effect.
 #
 class dellstorageprovisioning::mapping (
   # An array of hashes containing mapping properties
@@ -59,7 +62,7 @@ class dellstorageprovisioning::mapping (
       $full_volume_name_array = $complete_property_hash['volume_name_array']
     }
 
-    # Creates mappings
+    # Resource Type definition for mapping
     dellstorageprovisioning_volume_map { $full_volume_name_array:
       ensure        => $complete_property_hash['ensure'],
       servername    => $complete_property_hash['server_name'],

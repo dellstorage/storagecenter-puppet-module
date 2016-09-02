@@ -13,7 +13,8 @@
 #    under the License.
 #
 # Mapping custom type
-
+# This file presents mapping to Puppet as an object that it can manage.
+#
 Puppet::Type.newtype(:dellstorageprovisioning_volume_map) do
 	@doc = "Manage Mapping and Unmapping Volumes."
 	

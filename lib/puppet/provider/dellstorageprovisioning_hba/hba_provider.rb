@@ -13,6 +13,8 @@
 #    under the License.
 #
 # Provider for HBA custom type
+# The provider tells Puppet what to do with the HBAs attributes
+#
 require 'puppet/files/dsm_api_server'
 
 Puppet::Type.type(:dellstorageprovisioning_hba).provide(:hba_provider) do
@@ -27,20 +29,26 @@ Puppet::Type.type(:dellstorageprovisioning_hba).provide(:hba_provider) do
 		payload = {}
 		
 		if @resource[:allowmanual] == :true
+			Puppet.debug "Allow Manual: true"
 			payload["AllowManual"] = true
 		end
 		payload
 	end
 	
+	# Adding HBA
 	def create
+		Puppet.info "Adding HBA '#{@resource[:wwn]}' to Server '#{@resource[:name]}'."
 		payload = assign_payload
 		@hba_id = DSMAPIServer.add_HBA(@serv_id, @resource[:porttype], @resource[:wwn], payload)
 	end
 	
+	# Removing HBA
 	def destroy
+		Puppet.info "Removing HBA '#{@resource[:wwn]}' from Server '#{@resource[:name]}'."
 		DSMAPIServer.remove_HBA(@serv_id, @hba_id)
 	end
 	
+	# Determining whether HBA exists
 	# This method is always called first
 	def exists?
 		# Find the server id

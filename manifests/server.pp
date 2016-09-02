@@ -13,6 +13,7 @@
 #    under the License.
 #
 # Handles server creation
+# Defaults can be set in this subclass
 #
 # Sample Usage:
 #   class { 'dellstorageprovisioning::server':
@@ -24,6 +25,7 @@
 #       storage_center => 12345,
 #     }]
 #   }
+# This sample parameter could also be passed to the main init.pp class with the same effect.
 #
 class dellstorageprovisioning::server (
   # An array of hashes containing server properties
@@ -119,7 +121,7 @@ class dellstorageprovisioning::server (
 
     # Creates the number of servers specified in the property hash
     if $server_hash['is_server_cluster'] == true {
-      # Creates a servercluster
+      # Resource Type definition for Server Cluster
       dellstorageprovisioning_servercluster { $name_array:
         ensure              => $server_hash['ensure'],
         alertonconnectivity => $server_hash['alert_on_connectivity'],
@@ -130,7 +132,7 @@ class dellstorageprovisioning::server (
         storagecenter       => $server_hash['storage_center'],
       }
     } else {
-      # Creates a server
+      # Resource Type definition for Server
       dellstorageprovisioning_server { $name_array:
         ensure              => $server_hash['ensure'],
         alertonconnectivity => $server_hash['alert_on_connectivity'],
@@ -148,6 +150,7 @@ class dellstorageprovisioning::server (
           # No point adding an HBA to a deleted volume.
           unless $server_hash['ensure'] == 'absent' {
             if $name_array.is_string == true {
+              # Resource Type definition for single HBA
               dellstorageprovisioning_hba { $name_array:
                 ensure        => 'present',
                 allowmanual   => false,
@@ -160,6 +163,7 @@ class dellstorageprovisioning::server (
                 fail "Must provide one WWN or iSCSI name per Server."
               }
               $name_array.each |$index, $name| {
+                # Resource Type definition for HBA from array
                 dellstorageprovisioning_hba { $name:
                   ensure        => 'present',
                   allowmanual   => false,

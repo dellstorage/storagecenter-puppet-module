@@ -12,6 +12,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 #
+# This class contains most of the utility methods as well as the methods used to contact the Storage Center.
+#
 require 'base64'
 require 'net/https'
 require 'json'
@@ -22,13 +24,13 @@ class DSMAPIRequest
 	
 	# Formatting methods
 	
-	# Converts the payload to json
+	# This method converts the payload to json
 	def self.format_payload(req, payload)
 		req.body = payload.to_json
 		req
 	end
 	
-	# Creates the headers used in all REST calls
+	# This method creates the headers used in all REST calls
 	def self.format_headers(req)
 		req["x-dell-api-version"] = @api_version
 		req["Content-Type"] = @content_type
@@ -36,7 +38,7 @@ class DSMAPIRequest
 		req
 	end
 	
-	# Set the scheme and verification
+	# This method sets the scheme and verification
 	def self.define_https(url)
 		http = Net::HTTP.new(url.host, url.port)
 		http.use_ssl = (url.scheme = "https")
@@ -44,8 +46,9 @@ class DSMAPIRequest
 		http
 	end
 	
-	# Create the nested hash for a filter
+	# This method creates the nested hash for a filter
 	def self.define_filter(filters)
+		Puppet.debug "Inside define_filter method of DSMAPIRequest."
 		filter_array = []
 		filters.each do |filter|
 			filter_hash = {
@@ -65,7 +68,7 @@ class DSMAPIRequest
 		payload_filter
 	end
 	
-	# Ensures that the call succeeded
+	# This method ensures that the call succeeded
 	def self.check_resp(resp, url)
 		unless resp.code =~ /^2/
 			raise Puppet::Error, "Call to #{url} failed: #{resp.code} #{resp.message}: #{resp.body}"
@@ -74,6 +77,7 @@ class DSMAPIRequest
 
 	# REST methods
 	
+	# This method sends a post request
 	def self.post(url, payload)
 		url = URI.parse(url)
 		
@@ -87,6 +91,7 @@ class DSMAPIRequest
 		response
 	end
 	
+	# This method sends a get request
 	def self.get(url)
 		url = URI.parse(url)
 		http = define_https(url)
@@ -98,6 +103,7 @@ class DSMAPIRequest
 		response
 	end
 	
+	# This method sends a delete request
 	def self.delete(url)
 		url = URI.parse(url)
 		http = define_https(url)
@@ -111,10 +117,13 @@ class DSMAPIRequest
 	
 	# Login methods
 	
+	# These methods use the same variables as normal rest calls.
+	
+	# This method sets the scheme and verification, creates the headers, sends the login request, and returns the response.
 	def self.make_connection(url, user, pass)
-		Puppet.debug("Inside make_connection method of DSMAPIRequest.")
-		url = URI.parse(url)
+		Puppet.debug "Inside make_connection method of DSMAPIRequest."
 		
+		url = URI.parse(url)
 		http = define_https(url)
 		
 		# The initial login call uses different headers
@@ -128,10 +137,13 @@ class DSMAPIRequest
 		response
 	end
 	
+	# This method assigns important variables and handles the response from the login call to obtain the cookie.
 	def self.login(ip, user, pass, folder_name, port_num)
 		Puppet.debug("Inside login method of DSMAPIRequest.")
+		
 		# Setting configuration details
 		$base_url = "https://" + ip + ":#{port_num}/api/rest"
+		Puppet.debug "Base URL is #{$base_url}"
 		@api_version = "3.0"
 		@content_type = "application/json"
 		url = "#{$base_url}/ApiConnection/Login"
@@ -150,6 +162,6 @@ class DSMAPIRequest
 		$cookie = cookie
 		$puppet_folder = folder_name
 		
-		Puppet.info "Login Successful."
+		Puppet.info "Login Successful!"
 	end
 end

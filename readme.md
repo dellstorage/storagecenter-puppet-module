@@ -6,7 +6,7 @@ This module uses Puppet's Custom Resource Types to allow the user to provision a
 
 The module is run by either a main manifest, a puppet master, or an ENC, that calls the main dellstorageprovisioning class (`manifests/init.pp`) with parameters defining the desired setup of the Storage Center(s).
 
-This module will create a 'puppet' folder on the Storage Center and will only create or destroy Storage Center objects within that folder. This is to protect the users' data as this module uses the object's name as an unique identifier, while the Storage Center allows multiple objects with the same name. 
+This module will create a 'Puppet' folder on the Storage Center and will only create or destroy Storage Center objects within that folder. This is to protect the users' data as this module uses the object's name as an unique identifier, while the Storage Center allows multiple objects with the same name. 
 
 ## Setup
 
@@ -14,27 +14,27 @@ The dellstorageprovisioning module requires a Puppet version of 3.8.4 or later. 
 
 This module requires the Puppet [stdlib module] (https://forge.puppet.com/puppetlabs/stdlib/3.2.1). If using an ENC, the stdlib class must be assigned to the same node as the dellstorageprovisioning module.
 
-The dellstorageprovisioning module has been designed to work with Foreman, Puppet Apply, and Puppet agent.
+The dellstorageprovisioning module has been designed to work with Puppet Enterprise, Puppet Apply, Puppet Agent, and Foreman.
 
 ## Usage
 
-Unlike most Puppet Modules, the dellstorageprovisioning module does not affect the Server on which it is run. The Server the module runs on is used to send REST calls to the DSM Data Collector or Dell Storage Center. It possible but not necessary to have this module running on multiple Servers.
+Unlike most Puppet Modules, the dellstorageprovisioning module does not affect the Server on which it is run. The Server the module runs on is used to send REST calls to the DSM Data Collector or Dell Storage Center. It possible but not necessary to have this module running on multiple Servers, as long as the objects they are managing do not interfere with one another.
 
 ### Puppet Apply
 
-[Puppet Apply] (https://docs.puppet.com/puppet/latest/reference/man/apply.html) is the client-only application of a local manifest. The user should ensure that the dellstorageprovisioning module is located within an environment on Puppet's [environmentpath] (https://docs.puppet.com/4.6/reference/environments_configuring.html). The environmentpath can be set in puppet.conf, which is found in the [$confdir] (https://docs.puppet.com/puppet/4.6/reference/dirs_confdir.html).
+[Puppet Apply] (https://docs.puppet.com/puppet/latest/reference/man/apply.html) is the client-only application of a local manifest. The user should ensure that the dellstorageprovisioning module is located within an [environment] (https://docs.puppet.com/puppet/4.6/reference/environments.html) on Puppet's [environmentpath] (https://docs.puppet.com/puppet/4.6/reference/environments_configuring.html#environmentpath). The environmentpath can be set in puppet.conf, which is found in the [$confdir] (https://docs.puppet.com/puppet/4.6/reference/dirs_confdir.html). Examples of a local manifest to be used with Puppet Apply can be found in the `examples` folder. The user will need to provide a full path to the manifest on the command line.
 
 ### Puppet Agent
 
-[Puppet Agent] (https://docs.puppet.com/puppet/latest/reference/man/agent.html) retrieves a catalog from the remote server and applies it on the local system. Both the dellstorageprovisioning module and the stdlib module must be assigned to the local system.
+[Puppet Agent] (https://docs.puppet.com/puppet/latest/reference/man/agent.html) retrieves a catalog from the remote server and applies it on the local system. Both the dellstorageprovisioning module and the stdlib module must be assigned to the local system. Puppet Agent will require a manifest on the master server. Examples of a manifest to be used with Puppet Agent can be found in the `examples` folder.
 
-### Foreman
+### Foreman/Puppet Enterprise
 
-To use [Foreman] (https://theforeman.org), the `dellstorageprovisioning` and `stdlib` classes must be assigned to the host from which the program will send the REST calls. Defaults can either be set within the code of the subclasses (select `Use Puppet Default` in Foreman to use these values as the default), or through Foreman. Any parameter for which the default value is a blank string should be set to use the Puppet Default when not overridden, as Foreman will not send a blank string as a parameter and Puppet will not declare a resource if a parameter is missing. The definition arrays are intended to be overridden within the main `dellstorageprovisioning` class, and the default values in the subclasses will fill in missing information.
+To use [Foreman] (https://theforeman.org) or [Puppet Enterprise] (https://puppet.com/product) the `dellstorageprovisioning` class must be assigned to the host from which the program will send the REST calls. Defaults can either be set within the code of the subclasses (select `Use Puppet Default` in Foreman to use these values as the default), or through Foreman/Puppet Enterprise. The definition arrays are intended to be overridden within the main `dellstorageprovisioning` class, and the default values in the subclasses will fill in missing information.
 
-Note: It is only necessary to assign the main dellstorageprovisioning class to the host in Foreman, as all the subclasses are called by the main class.
+Note: It is only necessary to assign the main dellstorageprovisioning class to the host in Foreman/Puppet Enterprise, as all the subclasses are called by the main class.
 
-Helpful Links: [Puppet Architecture] (https://docs.puppet.com/3.8/reference/architecture.html)
+Helpful Links: [Puppet Architecture] (https://docs.puppet.com/puppet/4.6/reference/architecture.html)
 
 ## Testing
 
@@ -102,7 +102,7 @@ The state of the Storage Center after running `examples/ServerExamples.pp` shoul
 
 ### Login
 
-A user can log into the DSM by providing the `ip_address` of the DSM and their username and password to the dellstorageprovisioning class. In Foreman the user can use the `Hidden Value` option to hide sensitive information from other Foreman users in your organization. If the user is using Puppet Apply, they will need to store the username and password in the main manifest.
+A user can log into the DSM by providing the `ip_address` of the DSM and their username and password to the dellstorageprovisioning class. In Foreman the user can use the `Hidden Value` option to hide sensitive information from other Foreman users in your organization. If the user is using Puppet Apply or Puppet Agent, they will need to store the ip address, username, and password in the main manifest.
 
 ### Server Folders
 
@@ -268,3 +268,24 @@ This example would map Volumes 'OneVolume', 'AnotherVolume', 'ThirdVolume', and 
 
 Puppet works by allowing the user to define a system, and then ensuring that the system exists as defined. Puppet is not designed to work with dynamic data. Because the user cannot define the ID of Storage Center objects before they have been created, Puppet cannot use the ID of a Storage Center object as a unique identifier. For example, the user can indicate that they want their system to include a Volume with instance ID 1, but if such a Volume does not exist it is not possible for Puppet to create it. The user could instead indicate that they want their system to include a Volume with name 'Vol', which would cause Puppet to use the name of the object as a unique identifier instead of the instance ID. Since the Storage Center supports having multiple Storage Center objects of the same type with identical names, this could cause issues and in some cases could lead to the wrong object being deleted.
 This module creates a Volume Folder and Server Folder on each Storage Center named 'puppet' in which it creates and destroys all Storage Center objects. This allows Puppet to use the Storage Center object's name as a unique identifier, without risking accidental deletion of the wrong objects.
+
+## Getting Help
+
+For specific issues with the Dell Storage Provisioning Puppet Module, file a [GitHub Issue](https://github.com/dellstorage/dellstorageprovisioning/issues).
+
+If you have any suggestions for an improvements, please feel free create a fork in your repository, make any changes, and submit a pull request to have the changes considered for merging. Community collaboration is welcome!
+
+**As a community project, no warranties are provided for the use of this code.**
+
+## License
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

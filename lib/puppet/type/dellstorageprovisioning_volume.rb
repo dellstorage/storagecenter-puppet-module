@@ -13,6 +13,8 @@
 #    under the License.
 #
 # Volume custom type
+# This file presents a Volume and its properties to Puppet as an object that it can manage.
+#
 Puppet::Type.newtype(:dellstorageprovisioning_volume) do
 	@doc = "Manage volume creation, modification and deletion."
   

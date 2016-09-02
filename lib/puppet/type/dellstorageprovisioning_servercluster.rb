@@ -13,7 +13,8 @@
 #    under the License.
 #
 # Server Cluster custom type
-
+# This file presents a Server Cluster and its properties to Puppet as an object that it can manage.
+#
 Puppet::Type.newtype(:dellstorageprovisioning_servercluster) do
 	@doc = "Manage ServerCluster creation, modification, and deletion."
 	

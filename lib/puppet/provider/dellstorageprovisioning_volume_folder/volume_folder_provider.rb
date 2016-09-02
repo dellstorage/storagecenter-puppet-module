@@ -13,7 +13,8 @@
 #    under the License.
 #
 # Provider for volume folder custom type
-
+# The provider tells Puppet what to do with the attributes of a defined Volume Folder.
+#
 require 'puppet/files/dsm_api_folder'
 
 Puppet::Type.type(:dellstorageprovisioning_volume_folder).provide(:volume_folder_provider) do
@@ -22,14 +23,20 @@ Puppet::Type.type(:dellstorageprovisioning_volume_folder).provide(:volume_folder
 	# Class variables reduce REST calls
 	@fold_id = nil
 	
+	# Creating volume folder
 	def create
+		Puppet.info "Creating Volume Folder '#{@resource[:name]}'."
+		Puppet.debug "Storage Center: #{@resource[:storagecenter]}"
 		@fold_id = DSMAPIFolder.create_folder(@resource[:name], @resource[:storagecenter], "volume", @resource[:parent])
 	end
 	
+	# Deleting volume folder
 	def destroy
+		Puppet.info "Deleting VolumeFolder '#{@resource[:name]}'."
 		DSMAPIFolder.delete_folder(@fold_id, "volume")
 	end
 	
+	# Determining whether volume folder exists
 	# This method is always called first
 	def exists?
 		# Look for folder

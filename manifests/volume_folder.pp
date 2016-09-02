@@ -13,6 +13,7 @@
 #    under the License.
 #
 # Handles volume folder creation
+# Defaults can be set in this subclass
 #
 # Sample Usage:
 #   class { 'dellstorageprovisioning::volume_folder':
@@ -24,6 +25,7 @@
 #       storage_center => 12345,
 #     }]
 #   }
+# This sample parameter could also be passed to the main init.pp class with the same effect.
 #
 class dellstorageprovisioning::volume_folder (
   $folder_definition_array = [],
@@ -102,7 +104,7 @@ class dellstorageprovisioning::volume_folder (
       }
     }
 
-    # Defines the folder using the properties specified in the definition
+    # Resource Type definition for Volume Folder
     dellstorageprovisioning_volume_folder { $name_array:
       ensure        => $folder_hash['ensure'],
       notes         => $folder_hash['notes'],

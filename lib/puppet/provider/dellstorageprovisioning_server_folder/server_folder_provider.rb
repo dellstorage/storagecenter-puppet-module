@@ -13,7 +13,8 @@
 #    under the License.
 #
 # Provider for server folder custom type
-
+# The provider tells Puppet what to do with the Server Folder's defined attributes.
+#
 require 'puppet/files/dsm_api_folder'
 
 Puppet::Type.type(:dellstorageprovisioning_server_folder).provide(:server_folder_provider) do
@@ -22,14 +23,20 @@ Puppet::Type.type(:dellstorageprovisioning_server_folder).provide(:server_folder
 	# Class variables reduce REST calls
 	@fold_id = nil
 	
+	# Creating folder
 	def create
+		Puppet.info "Creating Server Folder '#{@resource[:name]}'."
+		Puppet.debug "Storage Center: #{@resource[:storagecenter]}"
 		@fold_id = DSMAPIFolder.create_folder(@resource[:name], @resource[:storagecenter], "server", @resource[:parent])
 	end
 	
+	# Deleting folder
 	def destroy
+		Puppet.info "Deleting Server Folder '#{@resource[:name]}'."
 		DSMAPIFolder.delete_folder(@fold_id, "server")
 	end
 	
+	# Checking whether folder exists
 	# This method is always called first
 	def exists?
 		# Check for folder

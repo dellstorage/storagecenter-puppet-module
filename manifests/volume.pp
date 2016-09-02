@@ -13,6 +13,7 @@
 #    under the License.
 #
 # Handles volume creation
+# Defaults can be set in this subclass
 #
 # Sample Usage:
 #   class { 'dellstorageprovisioning::volume':
@@ -25,6 +26,7 @@
 #       storage_center => 12345,
 #     }]
 #   }
+# This sample parameter could also be passed to the main init.pp class with the same effect.
 #
 class dellstorageprovisioning::volume (
   # An array of hashes containing volume properties
@@ -121,7 +123,7 @@ class dellstorageprovisioning::volume (
       }
     }
 
-    # Defines the volume using the properties specified in the property hash.
+    # Resource Type definition for Volume
     dellstorageprovisioning_volume { $name_array:
       ensure               => $volume_hash['ensure'],
       datapagesize         => $volume_hash['data_page_size'],
@@ -145,6 +147,7 @@ class dellstorageprovisioning::volume (
     unless $volume_hash['server_name'] == '' {
       # No point in mapping deleted volumes
       if $volume_hash['ensure'] == 'present' {
+        # Resource Type definition for mapping
         dellstorageprovisioning_volume_map { $name_array:
           ensure        => "present",
           servername    => $volume_hash['server_name'],

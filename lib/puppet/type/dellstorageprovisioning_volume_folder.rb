@@ -13,7 +13,8 @@
 #    under the License.
 #
 # Volume folder custom type
-
+# This file presents a Volume Folder and its properties to Puppet as an object that it can manage.
+#
 Puppet::Type.newtype(:dellstorageprovisioning_volume_folder) do
 	@doc = "Manage creating and deleting volume and server folders."
 	

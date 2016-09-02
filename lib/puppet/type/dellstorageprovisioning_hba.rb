@@ -13,6 +13,8 @@
 #    under the License.
 #
 # HBA custom type
+# This file presents an HBA and its properties to Puppet as an object that it can manage.
+#
 Puppet::Type.newtype(:dellstorageprovisioning_hba) do
 	@doc = "Manage Server HBA creation, modification, and deletion."
 	

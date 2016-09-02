@@ -13,7 +13,9 @@
 #    under the License.
 #
 # Provider for server cluster custom type
-
+# The provider tells Puppet what to do with the Cluster's defined attributes.
+# After this point, the program no longer distinguishes between Servers and Server Clusters.
+#
 require 'puppet/files/dsm_api_server'
 
 Puppet::Type.type(:dellstorageprovisioning_servercluster).provide(:servercluster_provider) do
@@ -27,32 +29,42 @@ Puppet::Type.type(:dellstorageprovisioning_servercluster).provide(:servercluster
 		payload = {}
 		
 		if @resource[:alertonconnectivity] == :true
+			Puppet.debug "Alert On Connectivity: #{@resource[:alertonconnectivity]}"
 			payload["AlertOnConnectivity"] = true
 		end
 		
 		if @resource[:alertonpartialconnectivity] == :true
+			Puppet.debug "Alert On Partial Connectivity: #{@resource[:alertonpartialconnectivity]}"
 			payload["AlertOnPartialConnectivity"] = true
 		end
 	
 		unless @resource[:notes] == ''
+			Puppet.debug "Notes: #{@resource[:notes]}"
 			payload["Notes"] = @resource[:notes]
 		end
 		
 		payload["OperatingSystem"] = @resource[:operatingsystem]
+		Puppet.debug "Operating System: #{@resource[:operatingsystem]}"
 		
 		payload["ServerFolder"] = @resource[:serverfolder]
 		
 		payload
 	end
 	
+	# Creating server cluster
 	def create
+		Puppet.info "Creating Server Cluster '#{@resource[:name]}'."
+		Puppet.debug "Storage Center: #{@resource[:storagecenter]}"
 		DSMAPIServer.create_servercluster(@resource[:name], @resource[:storagecenter], assign_payload)
 	end
 	
+	# Deleting server cluster
 	def destroy
+		Puppet.info "Deleting Server Cluster '#{@resource[:name]}'."
 		DSMAPIServer.delete_server(@cluster_id)
 	end
 	
+	# Determining whether server cluster exists
 	# This method is always called first
 	def exists?
 		# Look for cluster

@@ -13,6 +13,7 @@
 #    under the License.
 #
 # Manages adding and removing HBAs from Servers
+# Defaults can be set in this subclass
 #
 # Sample Usage:
 #   class { 'dellstorageprovisioning::hba':
@@ -23,6 +24,7 @@
 #       storage_center => 12345,
 #     }]
 #   }
+# This sample parameter could also be passed to the main init.pp class with the same effect.
 #
 class dellstorageprovisioning::hba (
   $hba_definition_array = [],
@@ -63,6 +65,7 @@ class dellstorageprovisioning::hba (
       if $complete_property_hash['wwn_or_iscsi_name'] . is_array == false {
         fail "Must provide one WWN or iSCSI name per Server."
       }
+      # Resource Type definition for HBA via arrays
       $complete_property_hash['server_name'] . each |$index, $name| {
         dellstorageprovisioning_hba { $name:
           ensure        => $complete_property_hash['ensure'],
@@ -73,7 +76,7 @@ class dellstorageprovisioning::hba (
         }
       }
     } else {
-      # Add a single hba
+      # Resource Type definition for single HBA
       dellstorageprovisioning_hba { $complete_property_hash['server_name']:
         ensure        => $complete_property_hash['ensure'],
         allowmanual   => $complete_property_hash['allow_manual'],
