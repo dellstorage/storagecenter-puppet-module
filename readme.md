@@ -1,4 +1,4 @@
-# Puppet Storage Manager
+# Dell Storage Puppet Module
 
 ## About
 
@@ -271,7 +271,7 @@ This module creates a Volume Folder and Server Folder on each Storage Center nam
 
 ## Getting Help
 
-For specific issues with the Dell Storage Provisioning Puppet Module, file a [GitHub Issue](https://github.com/dellstorage/storagecenter-puppet-module/issues).
+For specific issues with the Dell Storage Puppet Module, file a [GitHub Issue](https://github.com/dellstorage/storagecenter-puppet-module/issues).
 
 If you have any suggestions for an improvements, please feel free create a fork in your repository, make any changes, and submit a pull request to have the changes considered for merging. Community collaboration is welcome!
 
